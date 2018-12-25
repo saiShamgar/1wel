@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">1Wel</string>
+    <string name="places_key">AIzaSyDSw2E4sphfTp4veFpNiEX1HMc2awl-TxE</string>
+    <string name="razorpaykeytext">rzp_test_XZhkhiMzBkJjZfN</string>
+    <string name="razorpaykeyLive">rzp_live_ES25AxnwXmZbHA</string>
+
+    //preferences agent
+    <string name="password_preference">com.example.sss.wel.Utils.login_preference</string>
+    <string name="agent_emial_preference">com.example.sss.wel.Utils.email_preference</string>
+    <string name="agent_phone_preference">com.example.sss.wel.Utils.phone_preference</string>
+    <string name="agent_location_preference">com.example.sss.wel.Utils.location_preference</string>
+    <string name="agent_confirm_pass_preference">com.example.sss.wel.Utils.confirm_pass_preference</string>
+    <string name="agent_aadhar_preference">com.example.sss.wel.Utils.confirm_aadhar_preference</string>
+    <string name="agent_bank_name_preference">com.example.sss.wel.Utils.bank_name_preference</string>
+    <string name="agent_bank_account_no__preference">com.example.sss.wel.Utils.bank_account_num_preference</string>
+    <string name="agent_bank_ifsc_preference">com.example.sss.wel.Utils.bank_ifsc_preference</string>
+    <string name="agent_pan_num_preference">com.example.sss.wel.Utils.pan_num_preference</string>
+    <string name="agent_gender_preference">com.example.sss.wel.Utils.gender_preference</string>
+    <string name="agent_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
+
+    //provider preference
+    <string name="provider_name_preference">com.example.sss.wel.Utils.name_preference</string>
+    <string name="provider_phone_preference">com.example.sss.wel.Utils.phone_preference</string>
+    <string name="provider_location_preference">com.example.sss.wel.Utils.location_preference</string>
+    <string name="provider_service_preference">com.example.sss.wel.Utils.service_preference</string>
+    <string name="provider_website_preference">com.example.sss.wel.Utils.website_preference</string>
+    <string name="provider_gender_preference">com.example.sss.wel.Utils.gender_preference</string>
+    <string name="provider_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
+
+
+
+</resources>

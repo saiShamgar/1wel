@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".UI.MainActivity">
+
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="160dp"
+        android:layout_width="match_parent">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar1"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="parallax"
+                android:layout_marginBottom="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/one_wel_logo"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/spiderman"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1Wel"
+                android:layout_toRightOf="@+id/one_wel_logo"
+                android:layout_marginStart="15sp"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+            <Button
+                android:layout_toLeftOf="@+id/one_wel_provider"
+                android:id="@+id/one_wel_agent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="Agent"
+                android:textAllCaps="false"
+                />
+            <Button
+                android:layout_alignParentEnd="true"
+                android:id="@+id/one_wel_provider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="Provider"
+                android:textAllCaps="false" />
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:background="?attr/colorPrimary"
+                app:layout_collapseMode="parallax"
+                android:layout_gravity="bottom">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/mainActivity_location"
+                        android:layout_height="40dp"
+                        android:inputType="text|textMultiLine"
+                        android:layout_width="match_parent"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="14sp"
+                        android:hint="enter Location"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/stroke_background_white"
+                        android:drawableEnd="@drawable/ic_location_on_white_24dp"/>
+                    <Spinner
+                        android:id="@+id/mainAcitivity_Category"
+                        android:layout_below="@+id/mainActivity_location"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginTop="10dp">
+                    </Spinner>
+                    <Spinner
+                        android:id="@+id/mainActivity_Sub_Category"
+                        android:layout_toRightOf="@+id/mainAcitivity_Category"
+                        android:layout_below="@+id/mainActivity_location"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginTop="10dp">
+                    </Spinner>
+
+                    <Button
+                        android:layout_toRightOf="@+id/mainActivity_Sub_Category"
+                        android:layout_below="@+id/mainActivity_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="Go"/>
+
+                </RelativeLayout>
+
+
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

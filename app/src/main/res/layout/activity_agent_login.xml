@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.Agent.AgentLoginActivity"
+    android:background="@drawable/background_image">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <FrameLayout
+            android:id="@+id/fl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:background="@drawable/white_round_background">
+
+                <EditText
+                    android:id="@+id/agent_login_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="80dp"
+                    android:hint="Enter email"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp"
+                    android:layout_marginStart="50sp"
+                    android:background="@drawable/stroke_background"
+                    android:paddingStart="10dp"
+                    android:drawableEnd="@drawable/ic_email_black_24dp"
+                    android:paddingEnd="10dp"/>
+                <EditText
+                    android:id="@+id/agent_login_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingTop="5dp"
+                    android:hint="Enter Password"
+                    android:textSize="15sp"
+                    android:layout_below="@+id/agent_login_name"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/stroke_background"
+                    android:paddingStart="10dp"
+                    android:drawableEnd="@drawable/ic_lock_black_24dp"
+                    android:paddingEnd="10dp"/>
+
+                <Button
+                    android:id="@+id/agent_login_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/agent_login_pass"
+                    android:layout_centerHorizontal="true"
+                    android:textAllCaps="false"
+                    android:text="Login"
+                    android:textColor="@color/white"
+                    android:paddingStart="35sp"
+                    android:paddingEnd="35sp"
+                    android:background="@drawable/green_round_background"
+                    android:layout_marginTop="20dp"/>
+                <TextView
+                    android:id="@+id/txt_or"
+                    android:layout_below="@id/agent_login_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Or"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"
+                    android:layout_margin="10dp"/>
+                <TextView
+                    android:id="@+id/txt_agent_signUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_or"
+                    android:text="SignUp/Register"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/txt_agent_forget_pass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_agent_signUp"
+                    android:text="forget password?"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="10dp"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:textSize="16sp"
+                    android:paddingBottom="50dp"/>
+
+
+
+            </RelativeLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/batman"/>
+        </FrameLayout>
+
+
+
+    </RelativeLayout>
+
+
+</ScrollView>
