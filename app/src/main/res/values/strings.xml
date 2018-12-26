@@ -17,6 +17,7 @@
     <string name="agent_pan_num_preference">com.example.sss.wel.Utils.pan_num_preference</string>
     <string name="agent_gender_preference">com.example.sss.wel.Utils.gender_preference</string>
     <string name="agent_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
+    <string name="agent_dob_preference">com.example.sss.wel.Utils.dob_preference</string>
 
     //provider preference
     <string name="provider_name_preference">com.example.sss.wel.Utils.name_preference</string>
@@ -26,6 +27,7 @@
     <string name="provider_website_preference">com.example.sss.wel.Utils.website_preference</string>
     <string name="provider_gender_preference">com.example.sss.wel.Utils.gender_preference</string>
     <string name="provider_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
+    <string name="provider_dob_preference">com.example.sss.wel.Utils.dob_preference</string>
 
 
 

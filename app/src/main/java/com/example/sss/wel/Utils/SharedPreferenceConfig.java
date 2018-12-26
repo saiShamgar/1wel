@@ -153,6 +153,19 @@ public class SharedPreferenceConfig {
         Log.i("SharedPreferanceRead: ",""+gender);
         return gender;
     }
+    public void writeAgentDob(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.agent_dob_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readAgentDob(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.agent_dob_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
     public void writeAgentPic(String gender){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(context.getResources().getString(R.string.agent_pan_num_preference), gender);

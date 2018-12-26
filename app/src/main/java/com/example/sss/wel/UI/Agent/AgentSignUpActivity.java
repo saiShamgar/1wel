@@ -41,6 +41,7 @@ import com.example.sss.wel.R;
 import com.example.sss.wel.UI.MainActivity;
 import com.example.sss.wel.Utils.SharedPreferenceConfig;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -62,10 +63,14 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import retrofit.RestAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,7 +92,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     //registration Widgets
     private EditText agent_signup_name,agent_signup_phone,agent_signup_pass,agent_signup_confirm_pass
             ,agent_signup_AadharNum,agent_signup_Bank_name,agent_signup_Bank_Account_num,agent_signup_Bank_Ifsc_Code,
-            agent_signup_Pan_number,agent_signup_virification;
+            agent_signup_Pan_number,agent_signup_virification,agent_signup_date_of_birth;
     private Button agent_submit_personal_details,agent_submit_bank_details,upload_image_agent,agent_reg_submit_btn,agent_verification_btn;
     private RadioButton radio_btn_male,radio_btn_female;
     private ImageView agent_image;
@@ -155,6 +160,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         agent_signup_Bank_Ifsc_Code=findViewById(R.id.agent_signup_Bank_Ifsc_Code);
         agent_signup_Pan_number=findViewById(R.id.agent_signup_Pan_number);
         agent_signup_virification=findViewById(R.id.agent_signup_virification);
+        agent_signup_date_of_birth=findViewById(R.id.agent_signup_date_of_birth);
 
 
         //initialize button widgets
@@ -324,6 +330,15 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             if (!(agent_signup_pass.getText().toString().equals(agent_signup_confirm_pass.getText().toString()))){
                 agent_signup_confirm_pass.setError("re enter the same password");
             }
+            if (TextUtils.isEmpty(agent_signup_date_of_birth.getText().toString())){
+                agent_signup_date_of_birth.setError("field is mandatory");
+            }
+            if ((validateDateFormat(agent_signup_date_of_birth.getText().toString()))==null){
+                sharedPreference.writeAgentDob(agent_signup_date_of_birth.getText().toString());
+
+            }
+
+
 
             //Storing values
             sharedPreference.writeAgentEmail(agent_signup_name.getText().toString());
@@ -340,6 +355,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             agent_signup_pass.setVisibility(View.GONE);
             agent_signup_confirm_pass.setVisibility(View.GONE);
             agent_submit_personal_details.setVisibility(View.GONE);
+            agent_signup_date_of_birth.setVisibility(View.GONE);
 
             agent_signup_AadharNum.setVisibility(View.VISIBLE);
             agent_signup_Bank_name.setVisibility(View.VISIBLE);
@@ -491,43 +507,49 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                             Log.e("pan num",agent_signup_Pan_number.getText().toString());
                             Log.e("gender",sharedPreference.readAgentGender());
                             Log.e("pic",sharedPreference.readAgentPic());
-                            Log.e("location",mSearchText.getText().toString());
-                            apiService= APIUrl.getApiClient().create(ApiService.class);
+                            Log.e("addres",mSearchText.getText().toString());
+                            Log.e("dob",sharedPreference.readAgentDob());
+
+                            RestAdapter adapter = new RestAdapter.Builder()
+                                    .setEndpoint(APIUrl.BASE_URL) //Setting the Root URL
+                                    .build(); //Finally building the adapter
+
+                            //Creating object for our interface
+                            ApiService api = adapter.create(ApiService.class);
                             loadingbar.dismiss();
-                            Call<AgentRegistration> call=apiService.agentRegistration(
-                                            sharedPreference.readAgentEmail(),
-                                            sharedPreference.readAgentPhone(),
-                                            latitude,
-                                            longitude,
-                                            sharedPreference.readAgentPassword(),
-                                            sharedPreference.readAgentAadhar(),
-                                            sharedPreference.readAgentBankName(),
-                                            sharedPreference.readAgentBankNumber(),
-                                            sharedPreference.readAgentBankIfsc(),
-                                            agent_signup_Pan_number.getText().toString(),
-                                            sharedPreference.readAgentGender(),
-                                            "gdhfhd",
-                                            mSearchText.getText().toString(),
-                                            "1");
+                            api.agentRegistration(
+                                   sharedPreference.readAgentEmail(),
+                                   sharedPreference.readAgentPhone(),
+                                   latitude,
+                                   longitude,
+                                   sharedPreference.readAgentPassword(),
+                                   sharedPreference.readAgentAadhar(),
+                                   sharedPreference.readAgentBankName(),
+                                   sharedPreference.readAgentBankNumber(),
+                                   sharedPreference.readAgentBankIfsc(),
+                                   agent_signup_Pan_number.getText().toString(),
+                                   sharedPreference.readAgentGender(),
+                                   "gdhfhd",
+                                   mSearchText.getText().toString(),
+                                   "1",
+                                   sharedPreference.readAgentDob(),
+                                   new Callback<Response>() {
+                                       @Override
+                                       public void onResponse(Call<Response> call, Response<Response> response) {
 
-                           call.enqueue(new Callback<AgentRegistration>() {
-                               @Override
-                               public void onResponse(Call<AgentRegistration> call, Response<AgentRegistration> response) {
+                                           Toast.makeText(getApplicationContext(),"status success "+response.body() ,Toast.LENGTH_LONG).show();
+                                           Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
+                                           agentLogin.putExtra("agent registered",true);
+                                           startActivity(agentLogin);
+                                           finish();
 
-                                   Toast.makeText(getApplicationContext(),"status success "+response.body() ,Toast.LENGTH_LONG).show();
-                                   Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
-                                   agentLogin.putExtra("agent registered",true);
-                                   startActivity(agentLogin);
-                                   finish();
-                               }
+                                       }
 
-                               @Override
-                               public void onFailure(Call<AgentRegistration> call, Throwable t) {
-                                   loadingbar.dismiss();
-
-                               }
-                           });
-
+                                       @Override
+                                       public void onFailure(Call<Response> call, Throwable t) {
+                                           loadingbar.dismiss();
+                                       }
+                                   });
                             //sendUserToMainActivity();
                         } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -594,5 +616,23 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         return byteArrayOutputStream.toByteArray();
     }
 
+    //date validating
+
+    public Date validateDateFormat(String dateToValdate) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        //To make strict date format validation
+        formatter.setLenient(false);
+        Date parsedDate = null;
+        try {
+            parsedDate = formatter.parse(dateToValdate);
+            //System.out.println("++validated DATE TIME ++"+formatter.format(parsedDate));
+
+        } catch (ParseException e) {
+            agent_signup_date_of_birth.setError("invalid date format");
+            //Handle exception
+        }
+        return parsedDate;
+    }
 
 }

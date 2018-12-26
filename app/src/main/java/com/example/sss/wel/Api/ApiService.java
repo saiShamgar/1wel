@@ -5,13 +5,19 @@ import com.example.sss.wel.Models.Services;
 
 import java.util.List;
 
+
 import retrofit2.Call;
+
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+
+import static com.example.sss.wel.Api.APIUrl.retrofit;
 
 public interface ApiService {
 
@@ -25,7 +31,7 @@ public interface ApiService {
     @Headers("X-API-KEY:" + "SHANKAR@111")
     @FormUrlEncoded
     @POST("users_list/users/user/")
-    Call<AgentRegistration> agentRegistration(
+     public void agentRegistration(
             @Field("username")String username ,
             @Field("phone")String phone,
             @Field("latitude")String latitude,
@@ -39,6 +45,7 @@ public interface ApiService {
             @Field("gender")String gender,
             @Field("profile_pic")String profile_pic,
             @Field("address")String address,
-            @Field("user_type")String type
-            );
+            @Field("user_type")String type,
+            @Field("dob")String dob,
+            Callback<Response> callback);
 }

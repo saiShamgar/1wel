@@ -32,16 +32,11 @@ public class AgentRegistration {
     String agentAddress;
     @SerializedName("user_type")
     String User_type;
+    @SerializedName("dob")
+    String dob;
 
-    public String getUser_type() {
-        return User_type;
-    }
 
-    public void setUser_type(String user_type) {
-        User_type = user_type;
-    }
-
-    public AgentRegistration(String agentEmail, String agentPhone, long agentLatitude, long agentLongitutde, String agentPassword, long agentAadhar, String agentBankName, long agentBankAccount, String agentBankIfsc, String agentPanNum, String agentGender, String agentImage, String agentAddress, String user_type) {
+    public AgentRegistration(String agentEmail, String agentPhone, long agentLatitude, long agentLongitutde, String agentPassword, long agentAadhar, String agentBankName, long agentBankAccount, String agentBankIfsc, String agentPanNum, String agentGender, String agentImage, String agentAddress, String user_type, String dob) {
 
         this.agentEmail = agentEmail;
         this.agentPhone = agentPhone;
@@ -57,6 +52,7 @@ public class AgentRegistration {
         this.agentImage = agentImage;
         this.agentAddress = agentAddress;
         User_type = user_type;
+        this.dob = dob;
     }
 
     public String getAgentEmail() {
@@ -162,4 +158,21 @@ public class AgentRegistration {
     public void setAgentAddress(String agentAddress) {
         this.agentAddress = agentAddress;
     }
+
+    public String getUser_type() {
+        return User_type;
+    }
+
+    public void setUser_type(String user_type) {
+        User_type = user_type;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
 }
