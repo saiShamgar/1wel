@@ -3,6 +3,8 @@
     package="com.example.sss.wel">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,7 +17,8 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".Api.AppController">
         <activity
             android:name=".UI.SplashScreenActivity"
             android:theme="@style/AppTheme1">
@@ -36,6 +39,8 @@
             android:value="@string/places_key" />
 
         <activity android:name=".UI.providers.ProviderSignUpActivity" />
+        <activity android:name=".UI.Agent.AgentProfileSettings"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

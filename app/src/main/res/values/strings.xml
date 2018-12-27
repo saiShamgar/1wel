@@ -5,7 +5,7 @@
     <string name="razorpaykeyLive">rzp_live_ES25AxnwXmZbHA</string>
 
     //preferences agent
-    <string name="password_preference">com.example.sss.wel.Utils.login_preference</string>
+    <string name="login_preference">com.example.sss.wel.Utils.login_preference</string>
     <string name="agent_emial_preference">com.example.sss.wel.Utils.email_preference</string>
     <string name="agent_phone_preference">com.example.sss.wel.Utils.phone_preference</string>
     <string name="agent_location_preference">com.example.sss.wel.Utils.location_preference</string>
@@ -18,6 +18,7 @@
     <string name="agent_gender_preference">com.example.sss.wel.Utils.gender_preference</string>
     <string name="agent_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
     <string name="agent_dob_preference">com.example.sss.wel.Utils.dob_preference</string>
+    <string name="agent_login_preference">com.example.sss.wel.Utils.login_preference</string>
 
     //provider preference
     <string name="provider_name_preference">com.example.sss.wel.Utils.name_preference</string>
@@ -28,7 +29,6 @@
     <string name="provider_gender_preference">com.example.sss.wel.Utils.gender_preference</string>
     <string name="provider_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
     <string name="provider_dob_preference">com.example.sss.wel.Utils.dob_preference</string>
-
 
 
 </resources>

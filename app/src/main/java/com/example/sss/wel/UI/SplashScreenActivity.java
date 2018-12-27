@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.example.sss.wel.Adapters.MySplashScreenAdapter;
 import com.example.sss.wel.R;
+import com.example.sss.wel.Utils.SharedPreferenceConfig;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -23,11 +24,13 @@ public class SplashScreenActivity extends AppCompatActivity {
     private static final Integer[] slideImages= {R.drawable.batman,R.drawable.spiderman,R.drawable.batman,R.drawable.spiderman};
     private ArrayList<Integer> slidImagesArray = new ArrayList<Integer>();
     private Button btnGetStarted;
+    private SharedPreferenceConfig sharedPreferenceConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        sharedPreferenceConfig=new SharedPreferenceConfig(this);
         init();
     }
     private void init() {
@@ -39,6 +42,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         mPager.setAdapter(new MySplashScreenAdapter(SplashScreenActivity.this,slidImagesArray));
         CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(mPager);
+
+
+
 
         btnGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,6 +18,7 @@ import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,12 +32,25 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.sss.wel.Adapters.PlaceAutocompleteAdapter;
 import com.example.sss.wel.Api.APIUrl;
 import com.example.sss.wel.Api.ApiService;
+import com.example.sss.wel.Api.AppController;
+import com.example.sss.wel.Api.VolleyMultipartRequest;
 import com.example.sss.wel.Models.AgentRegistration;
 import com.example.sss.wel.Models.Services;
+import com.example.sss.wel.Models.Status;
+import com.example.sss.wel.Models.Test;
 import com.example.sss.wel.R;
 import com.example.sss.wel.UI.MainActivity;
 import com.example.sss.wel.Utils.SharedPreferenceConfig;
@@ -60,6 +74,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.android.volley.Response;
+
+import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -67,13 +86,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit.RestAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
+import retrofit2.http.Field;
+
 
 public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener{
     private static final LatLngBounds LAT_LNG_BOUNDS=new LatLngBounds(
@@ -114,12 +139,17 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     boolean boolean_permission;
     public static final int REQUEST_PERMISSIONS = 1;
     private Uri imagecaptureuri;
+
     private  AlertDialog dialog;
     private Bitmap bmp;
 
     private ApiService apiService;
     private String latitude;
     private String longitude;
+
+    private RequestQueue queue;
+    public static final String REQUEST_TAG = "JSON_OBJECT_REQUEST_TAG";
+    public static final String POST_REQUEST_TAG = "JSON_OBJECT_POST_REQUEST_TAG";
 
 
     @Override
@@ -128,6 +158,8 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         setContentView(R.layout.activity_agent_sign_up);
         getLocationPermission();
 
+
+        fn_permission();
 
         mAuth=FirebaseAuth.getInstance();
         sharedPreference=new SharedPreferenceConfig(this);
@@ -303,36 +335,36 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
 
         if (v.getId()==R.id.agent_submit_personal_details){
 
-            if (TextUtils.isEmpty(agent_signup_name.getText().toString())) {
-                agent_signup_name.setError("Field cannot be blank");
-                return;
-            }
-            if (TextUtils.isEmpty(agent_signup_phone.getText().toString())){
-                agent_signup_phone.setError("Field cannot be blank");
-                return;
-            }
-            if (!(agent_signup_phone.getText().toString().length()==10)){
-                agent_signup_phone.setError("please enter valid number");
-                return;
-            }
-            if (TextUtils.isEmpty(mSearchText.getText().toString())){
-                mSearchText.setError("Field cannot be blank");
-                return;
-            }
-            if (TextUtils.isEmpty(agent_signup_pass.getText().toString())) {
-                agent_signup_pass.setError("Field cannot be blank");
-                return;
-            }
-            if (TextUtils.isEmpty(agent_signup_confirm_pass.getText().toString())) {
-                agent_signup_confirm_pass.setError("Field cannot be blank");
-                return;
-            }
-            if (!(agent_signup_pass.getText().toString().equals(agent_signup_confirm_pass.getText().toString()))){
-                agent_signup_confirm_pass.setError("re enter the same password");
-            }
-            if (TextUtils.isEmpty(agent_signup_date_of_birth.getText().toString())){
-                agent_signup_date_of_birth.setError("field is mandatory");
-            }
+//            if (TextUtils.isEmpty(agent_signup_name.getText().toString())) {
+//                agent_signup_name.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(agent_signup_phone.getText().toString())){
+//                agent_signup_phone.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (!(agent_signup_phone.getText().toString().length()==10)){
+//                agent_signup_phone.setError("please enter valid number");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(mSearchText.getText().toString())){
+//                mSearchText.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(agent_signup_pass.getText().toString())) {
+//                agent_signup_pass.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(agent_signup_confirm_pass.getText().toString())) {
+//                agent_signup_confirm_pass.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (!(agent_signup_pass.getText().toString().equals(agent_signup_confirm_pass.getText().toString()))){
+//                agent_signup_confirm_pass.setError("re enter the same password");
+//            }
+//            if (TextUtils.isEmpty(agent_signup_date_of_birth.getText().toString())){
+//                agent_signup_date_of_birth.setError("field is mandatory");
+//            }
             if ((validateDateFormat(agent_signup_date_of_birth.getText().toString()))==null){
                 sharedPreference.writeAgentDob(agent_signup_date_of_birth.getText().toString());
 
@@ -363,32 +395,45 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             agent_signup_Bank_Ifsc_Code.setVisibility(View.VISIBLE);
             agent_signup_Pan_number.setVisibility(View.VISIBLE);
             agent_submit_bank_details.setVisibility(View.VISIBLE);
+//            apiService=APIUrl.getApiClient().create(ApiService.class);
+//            Call<Test> call=apiService.agentRegistration1("sai",
+//                    new Callback<Status>() {
+//                        @Override
+//                        public void onResponse(Call<Status> call, Response<Status> response) {
+//                            Toast.makeText(getApplicationContext(),"succes"+response.body().getMessage(),Toast.LENGTH_LONG).show();
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<Status> call, Throwable t) {
+//
+//                        }
+//                    });
 
 
 
         }
         if (v.getId()==R.id.agent_submit_bank_details){
 
-            if (TextUtils.isEmpty(agent_signup_AadharNum.getText().toString())){
-                agent_signup_AadharNum.setError("Field cannot be blank");
-                return;
-            }
-            if (TextUtils.isEmpty(agent_signup_Bank_name.getText().toString())) {
-                agent_signup_Bank_name.setError("Field cannot be blank");
-                return;
-            }
-            if (TextUtils.isEmpty(agent_signup_Bank_Account_num.getText().toString())) {
-                agent_signup_Bank_Account_num.setError("Field cannot be blank");
-                return;
-            }
-            if (TextUtils.isEmpty(agent_signup_Bank_Ifsc_Code.getText().toString())) {
-                agent_signup_Bank_Ifsc_Code.setError("Field cannot be blank");
-                return;
-            }
-            if (TextUtils.isEmpty(agent_signup_Pan_number.getText().toString())) {
-                agent_signup_Pan_number.setError("Field cannot be blank");
-                return;
-            }
+//            if (TextUtils.isEmpty(agent_signup_AadharNum.getText().toString())){
+//                agent_signup_AadharNum.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(agent_signup_Bank_name.getText().toString())) {
+//                agent_signup_Bank_name.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(agent_signup_Bank_Account_num.getText().toString())) {
+//                agent_signup_Bank_Account_num.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(agent_signup_Bank_Ifsc_Code.getText().toString())) {
+//                agent_signup_Bank_Ifsc_Code.setError("Field cannot be blank");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(agent_signup_Pan_number.getText().toString())) {
+//                agent_signup_Pan_number.setError("Field cannot be blank");
+//                return;
+//            }
 
             sharedPreference.writeAgentAadhar(agent_signup_AadharNum.getText().toString());
             sharedPreference.writeAgentBankName(agent_signup_Bank_name.getText().toString());
@@ -506,58 +551,56 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                             Log.e("bank ifsc",sharedPreference.readAgentBankIfsc());
                             Log.e("pan num",agent_signup_Pan_number.getText().toString());
                             Log.e("gender",sharedPreference.readAgentGender());
-                            Log.e("pic",sharedPreference.readAgentPic());
+                            Log.e("pic",imageToString(bmp));
                             Log.e("addres",mSearchText.getText().toString());
                             Log.e("dob",sharedPreference.readAgentDob());
 
-                            RestAdapter adapter = new RestAdapter.Builder()
-                                    .setEndpoint(APIUrl.BASE_URL) //Setting the Root URL
-                                    .build(); //Finally building the adapter
+                            apiService=APIUrl.getApiClient().create(ApiService.class);
+                            Call<Status> call=apiService.agentRegistration(
+                                    sharedPreference.readAgentEmail(),
+                                    sharedPreference.readAgentPhone(),
+                                    latitude,
+                                    longitude,
+                                    sharedPreference.readAgentPassword(),
+                                    sharedPreference.readAgentAadhar(),
+                                    sharedPreference.readAgentBankName(),
+                                    sharedPreference.readAgentBankNumber(),
+                                    sharedPreference.readAgentBankIfsc(),
+                                    agent_signup_Pan_number.getText().toString(),
+                                    sharedPreference.readAgentGender(),
+                                    imageToString(bmp),
+                                    mSearchText.getText().toString(),
+                                    sharedPreference.readAgentDob());
+                            call.enqueue(new Callback<Status>() {
+                                @Override
+                                public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
+                                    loadingbar.dismiss();
+                                    Toast.makeText(getApplicationContext(),"status success "+response.body().getMessage(),Toast.LENGTH_LONG).show();
+                                    Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
+                                    startActivity(agentLogin);
+                                    finish();
+                                    sharedPreference.writeAgentLoggedIn("agent registered");
+                                }
 
-                            //Creating object for our interface
-                            ApiService api = adapter.create(ApiService.class);
-                            loadingbar.dismiss();
-                            api.agentRegistration(
-                                   sharedPreference.readAgentEmail(),
-                                   sharedPreference.readAgentPhone(),
-                                   latitude,
-                                   longitude,
-                                   sharedPreference.readAgentPassword(),
-                                   sharedPreference.readAgentAadhar(),
-                                   sharedPreference.readAgentBankName(),
-                                   sharedPreference.readAgentBankNumber(),
-                                   sharedPreference.readAgentBankIfsc(),
-                                   agent_signup_Pan_number.getText().toString(),
-                                   sharedPreference.readAgentGender(),
-                                   "gdhfhd",
-                                   mSearchText.getText().toString(),
-                                   "1",
-                                   sharedPreference.readAgentDob(),
-                                   new Callback<Response>() {
-                                       @Override
-                                       public void onResponse(Call<Response> call, Response<Response> response) {
+                                @Override
+                                public void onFailure(Call<Status> call, Throwable t) {
+                                    loadingbar.dismiss();
+                                }
+                            });
 
-                                           Toast.makeText(getApplicationContext(),"status success "+response.body() ,Toast.LENGTH_LONG).show();
-                                           Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
-                                           agentLogin.putExtra("agent registered",true);
-                                           startActivity(agentLogin);
-                                           finish();
 
-                                       }
 
-                                       @Override
-                                       public void onFailure(Call<Response> call, Throwable t) {
-                                           loadingbar.dismiss();
-                                       }
-                                   });
-                            //sendUserToMainActivity();
-                        } else {
+
+
+                            } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                             }
                         }
                     }
                 });
+
+
     }
 
     //image uploading code
@@ -579,14 +622,14 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             if(requestCode==PICK_UP_CAM) {
                 Bundle bundle=data.getExtras();
                 bmp=(Bitmap)bundle.get("data");
-                sharedPreference.writeAgentPic(getFileDataFromDrawable(bmp).toString());
                 agent_image.setImageBitmap(bmp);
             }
             else if(requestCode==PICK_FROM_FILE) {
                 imagecaptureuri=data.getData();
                 try {
                     bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imagecaptureuri);
-                    sharedPreference.writeAgentPic(getFileDataFromDrawable(bmp).toString());
+
+                    Log.e("bitmap", bmp.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -609,11 +652,12 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     }
 
     //upload images
-    public byte[] getFileDataFromDrawable(Bitmap bitmap)
+    public String  imageToString(Bitmap bitmap)
     {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
+        byte[] imgbyte=byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgbyte,Base64.DEFAULT);
     }
 
     //date validating
@@ -635,4 +679,108 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         return parsedDate;
     }
 
+//    private void sendPostRequestWithHeaders() {
+////        // Change the url of the post request as per your need...This url is just for demo purposes and
+////        // actually it does not post data...i.e. it will return same response irrespective of the value you
+////        // as parameters.
+////
+////        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, APIUrl.BASE_URL1+"users_list/users/user/",
+////                new Response.Listener<NetworkResponse>() {
+////                    @Override
+////                    public void onResponse(NetworkResponse response) {
+////                        try {
+////                            loadingbar.dismiss();
+////                            JSONObject obj = new JSONObject(new String(response.data));
+////                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+////                            Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
+////                            startActivity(agentLogin);
+////                            finish();
+////                            sharedPreference.writeAgentLoggedIn("agent registered");
+////                        } catch (JSONException e) {
+////                            e.printStackTrace();
+////                        }
+////                    }
+////                },
+////                new Response.ErrorListener() {
+////                    @Override
+////                    public void onErrorResponse(VolleyError error) {
+////                        loadingbar.dismiss();
+////                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+////                    }
+////                })
+////        {
+////            /*
+////             * If you want to add more parameters with the image
+////             * you can do it here
+////             * here we have only one parameter with the image
+////             * which is tags
+////             * */
+////            @Override
+////            protected Map<String, String> getParams() {
+////                Map<String, String> params = new HashMap<>();
+////                params.put("username",sharedPreference.readAgentEmail());
+////                params.put("phone",sharedPreference.readAgentPhone());
+////                params.put("latitude",latitude);
+////                params.put("longitude",longitude);
+////                params.put("pass",sharedPreference.readAgentPassword());
+////                params.put("aadhar_no",sharedPreference.readAgentAadhar());
+////                params.put("bank_name",sharedPreference.readAgentBankName());
+////                params.put("bank_ac_no",sharedPreference.readAgentBankNumber());
+////                params.put("bank_ifsc_code",sharedPreference.readAgentBankIfsc());
+////                params.put("pancard_no",agent_signup_Pan_number.getText().toString());
+////                params.put("gender",sharedPreference.readAgentGender());
+////                params.put("address",mSearchText.getText().toString());
+////                params.put("dob",sharedPreference.readAgentDob());
+////                return params;
+////            }
+////
+////            @Override
+////            public Map<String, String> getHeaders() throws AuthFailureError {
+////                Map<String, String> params = new HashMap<>();
+////                params.put("X-API-KEY:","SHANKAR@111");
+////                return params ;
+////            }
+////
+////            /*
+////             * Here we are passing image by renaming it with a unique name
+////             * */
+////
+////            @Override
+////            protected Map<String, DataPart> getByteData() {
+////                Map<String, DataPart> params = new HashMap<>();
+////                long imagename = System.currentTimeMillis();
+////                params.put("profile_pic", new DataPart(imagename + ".png", getFileDataFromDrawable(bmp)));
+////                return params;
+////            }
+////        };
+////
+////        //adding the request to volley
+////        Volley.newRequestQueue(this)
+////                .add(volleyMultipartRequest);
+//
+//    }
+    private void fn_permission() {
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)) {
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE))) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSIONS);
+            }
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.INTERNET))) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.INTERNET},
+                        REQUEST_PERMISSIONS);
+            }
+
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSIONS);
+            }
+        } else {
+            boolean_permission = true;
+        }
+    }
 }

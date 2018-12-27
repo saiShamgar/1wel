@@ -12,7 +12,7 @@ public class SharedPreferenceConfig {
 
     public SharedPreferenceConfig(Context context){
         this.context = context;
-        sharedPreferences = context.getSharedPreferences(context.getResources().getString(R.string.password_preference), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(context.getResources().getString(R.string.login_preference), Context.MODE_PRIVATE);
 
     }
     public void writeAgentGender(String gender){
@@ -27,6 +27,19 @@ public class SharedPreferenceConfig {
         gender = sharedPreferences.getString(context.getResources().getString(R.string.agent_gender_preference),"no");
         Log.i("SharedPreferanceRead: ",""+gender);
         return gender;
+    }
+    public void writeAgentLoggedIn(String logged){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.agent_login_preference), logged);
+        Log.i("SharedPreferanceWrite: ",""+logged);
+        editor.commit();
+    }
+
+    public String readAgentLoggedin(){
+        String logged;
+        logged = sharedPreferences.getString(context.getResources().getString(R.string.agent_login_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+logged);
+        return logged;
     }
 
     public void writeAgentEmail(String gender){
@@ -256,6 +269,20 @@ public class SharedPreferenceConfig {
     public String readProviderGender(){
         String gender;
         gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_gender_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
+    public void writeProviderDob(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_dob_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderDob(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_dob_preference),"no");
         Log.i("SharedPreferanceRead: ",""+gender);
         return gender;
     }

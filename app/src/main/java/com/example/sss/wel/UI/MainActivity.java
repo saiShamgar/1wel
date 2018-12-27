@@ -27,7 +27,9 @@ import com.example.sss.wel.Api.ApiService;
 import com.example.sss.wel.Models.Services;
 import com.example.sss.wel.R;
 import com.example.sss.wel.UI.Agent.AgentLoginActivity;
+import com.example.sss.wel.UI.Agent.AgentProfileSettings;
 import com.example.sss.wel.UI.providers.ProviderSignUpActivity;
+import com.example.sss.wel.Utils.SharedPreferenceConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -42,6 +44,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,8 +64,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     //widgets
     private AutoCompleteTextView mSearchText;
+    private CircleImageView one_wel_logo;
     private Button one_wel_agent,one_wel_provider;
     private String  agent_reg;
+    private int services_main,services_sub;
     private Spinner mainAcitivity_Category_Spinner,mainActivity_Sub_Category;
     private ArrayAdapter mainCategoryAdapter,subCategoryAdapter;
     ArrayList<String> mainCategoryList = new ArrayList<String>();
@@ -71,29 +76,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private List<Services> services_subCategory;
     private ApiService apiService;
     private RecyclerView recycler_view;
+    private SharedPreferenceConfig sharedPreferenceConfig;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferenceConfig=new SharedPreferenceConfig(this);
 
         one_wel_agent=findViewById(R.id.one_wel_agent);
         one_wel_provider=findViewById(R.id.one_wel_provider);
+        one_wel_logo=findViewById(R.id.one_wel_logo);
         mainAcitivity_Category_Spinner=findViewById(R.id.mainAcitivity_Category);
         mainActivity_Sub_Category=findViewById(R.id.mainActivity_Sub_Category);
         recycler_view=findViewById(R.id.recycler_view);
-        boolean defaultValue = false;
         boolean defaultValue1 = false;
-        boolean agent = getIntent().getBooleanExtra("agent registered", defaultValue);
         boolean provider = getIntent().getBooleanExtra("provider registered", defaultValue1);
-         if (agent){
+         if (sharedPreferenceConfig.readAgentLoggedin().contains("agent registered")){
+             one_wel_agent.setVisibility(View.GONE);
+             one_wel_logo.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     Intent profileSettings=new Intent(MainActivity.this, AgentProfileSettings.class);
+                     startActivity(profileSettings);
+                     finish();
+                 }
+             });
+         }
+         if (sharedPreferenceConfig.readAgentLoggedin().contains("agent registered") || provider){
              one_wel_agent.setVisibility(View.GONE);
          }
-         if (agent || provider){
-             one_wel_agent.setVisibility(View.GONE);
-         }
-
 
         one_wel_agent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,20 +153,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mainAcitivity_Category_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TextView service = (TextView)parent.getSelectedView();
-               String result = service.getText().toString();
+
                 apiService=APIUrl.getApiClient().create(ApiService.class);
+                services_main=parent.getSelectedItemPosition();
 
-                Call<List<Services>> call=apiService.getServices(result);
-
+                Call<List<Services>> call=apiService.getServices(services_main+1);
                 call.enqueue(new Callback<List<Services>>() {
                     @Override
                     public void onResponse(Call<List<Services>> call, Response<List<Services>> response) {
                         services_subCategory = response.body();
                         ArrayList<String> temp = new ArrayList<>();
+                        if (services_subCategory.isEmpty())
+                        {
+                            return;
+                        }
                         temp.add("Select SubCategory");
                         for (int i = 0; i < services_subCategory.size(); i++) {
                             temp.add(services_subCategory.get(i).getService());
+                            services_sub= Integer.parseInt(services_subCategory.get(i).getService_id());
                         }
                         subCategoryAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, temp);
                         subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

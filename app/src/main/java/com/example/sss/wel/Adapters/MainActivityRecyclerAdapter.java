@@ -15,11 +15,11 @@ import java.util.List;
 
 public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivityRecyclerAdapter.MainActivityViewHolder> {
 
-    private List<Services> services;
+
     private Context context;
 
-    public MainActivityRecyclerAdapter(List<Services> services, Context context) {
-        this.services = services;
+    public MainActivityRecyclerAdapter( Context context) {
+
         this.context = context;
     }
 
@@ -33,22 +33,20 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
 
     @Override
     public void onBindViewHolder(@NonNull MainActivityViewHolder holder, int position) {
-        holder.services.setText(services.get(position).getService());
+
 
     }
 
     @Override
     public int getItemCount() {
-        return services.size();
+        return 3;
     }
 
 
     public class MainActivityViewHolder extends RecyclerView.ViewHolder{
-       public TextView services;
 
         public MainActivityViewHolder(View itemView) {
             super(itemView);
-            services=(TextView)itemView.findViewById(R.id.services);
         }
     }
 }
