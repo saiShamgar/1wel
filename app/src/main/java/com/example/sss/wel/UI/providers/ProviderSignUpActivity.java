@@ -17,7 +17,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +42,7 @@ import com.example.sss.wel.Api.ApiService;
 import com.example.sss.wel.Models.Services;
 import com.example.sss.wel.Models.Status;
 import com.example.sss.wel.R;
+import com.example.sss.wel.UI.Agent.AgentLoginActivity;
 import com.example.sss.wel.UI.Agent.AgentSignUpActivity;
 import com.example.sss.wel.UI.MainActivity;
 import com.example.sss.wel.Utils.SharedPreferenceConfig;
@@ -87,11 +90,11 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
     private Boolean mlocation_permission_granted = false;
 
     //widgets
-    private AutoCompleteTextView mSearchText;
+    private AutoCompleteTextView mSearchText,providerServiceType;
 
     //registration Widgets
     private EditText provider_signup_name,provider_signup_phone,provider_signup_website_url,provider_signup_virification,provider_date_of_birth,agentRefId;
-    private Spinner providerService,providerServiceSubCategory;
+    private EditText providerServiceDescription;
     private Button provider_submit_personal_details,upload_image_provider,provider_reg_submit_btn,provider_verification_btn;
     private RadioButton provider_radio_btn_male,provider_radio_btn_female;
     private ImageView provider_image;
@@ -116,67 +119,67 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
     private AlertDialog dialog;
     private Bitmap bmp;
 
-    private ArrayAdapter mainCategoryAdapter,subCategoryAdapter;
-    ArrayList<String> mainCategoryList = new ArrayList<String>();
+    //private ArrayAdapter mainCategoryAdapter,subCategoryAdapter;
+   // ArrayList<String> mainCategoryList = new ArrayList<String>();
 
     //api interface
-    private List<Services> services_subCategory;
+    private List<Services> services_tyeps;
     private ApiService apiService;
 
     private String longitude,latitude;
-    private int serviceMain, serviceSub;
+  //  private int serviceMain, serviceSub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_provider_sign_up);
-        mAuth= FirebaseAuth.getInstance();
-        sharedPreference=new SharedPreferenceConfig(this);
+        mAuth = FirebaseAuth.getInstance();
+        sharedPreference = new SharedPreferenceConfig(this);
         getLocationPermission();
         ActivityCompat.requestPermissions(ProviderSignUpActivity.this,
                 new String[]{Manifest.permission.CAMERA},
                 1);
 
         //Initializing google api client
-        googleApiClient=new GoogleApiClient
+        googleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this,this)
+                .enableAutoManage(this, this)
                 .build();
 
-        mSearchText=(AutoCompleteTextView)findViewById(R.id.provider_signup_Location);
+        mSearchText = (AutoCompleteTextView) findViewById(R.id.provider_signup_Location);
         mSearchText.setOnItemClickListener(mAutoCompleteListener);
-        autocompleteAdapter=new PlaceAutocompleteAdapter(this,googleApiClient,LAT_LNG_BOUNDS,null);
+        autocompleteAdapter = new PlaceAutocompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, null);
         mSearchText.setAdapter(autocompleteAdapter);
 
         //initializing editText widgets
-        provider_signup_name=findViewById(R.id.provider_signup_name);
-        provider_signup_phone=findViewById(R.id.provider_signup_phone);
-        providerService=findViewById(R.id.providerService);
-        providerServiceSubCategory=findViewById(R.id.providerServiceSubCategory);
-        provider_signup_website_url=findViewById(R.id.provider_signup_website_url);
-        provider_signup_virification=findViewById(R.id.provider_signup_virification);
-        provider_date_of_birth=findViewById(R.id.provider_date_of_birth);
-        agentRefId=findViewById(R.id.provider_agentRefId);
+        provider_signup_name = findViewById(R.id.provider_signup_name);
+        provider_signup_phone = findViewById(R.id.provider_signup_phone);
+        providerServiceType = findViewById(R.id.provider_services_type);
+        providerServiceDescription = findViewById(R.id.provider_service_descp);
+        provider_signup_website_url = findViewById(R.id.provider_signup_website_url);
+        provider_signup_virification = findViewById(R.id.provider_signup_virification);
+        provider_date_of_birth = findViewById(R.id.provider_date_of_birth);
+        agentRefId = findViewById(R.id.provider_agentRefId);
 
         //initialize button widgets
-        provider_submit_personal_details=findViewById(R.id.provider_submit_personal_details);
-        upload_image_provider=findViewById(R.id.upload_image_provider);
-        provider_reg_submit_btn=findViewById(R.id.provider_reg_submit_btn);
-        provider_verification_btn=findViewById(R.id.provider_verification_btn);
+        provider_submit_personal_details = findViewById(R.id.provider_submit_personal_details);
+        upload_image_provider = findViewById(R.id.upload_image_provider);
+        provider_reg_submit_btn = findViewById(R.id.provider_reg_submit_btn);
+        provider_verification_btn = findViewById(R.id.provider_verification_btn);
 
         //initializing imageview
-        provider_image=findViewById(R.id.provider_image);
+        provider_image = findViewById(R.id.provider_image);
 
         //intializing Textview
-        txt_otp_hint_provider=findViewById(R.id.txt_otp_hint_provider);
+        txt_otp_hint_provider = findViewById(R.id.txt_otp_hint_provider);
 
 
         //initialize  RadioButtons
-        provider_radio_btn_male=findViewById(R.id.provider_radio_btn_male);
-        provider_radio_btn_female=findViewById(R.id.provider_radio_btn_female);
-        radioGroupProvider=findViewById(R.id.radioGroupProvider);
+        provider_radio_btn_male = findViewById(R.id.provider_radio_btn_male);
+        provider_radio_btn_female = findViewById(R.id.provider_radio_btn_female);
+        radioGroupProvider = findViewById(R.id.radioGroupProvider);
 
         //implementing click listeners
         provider_submit_personal_details.setOnClickListener(this);
@@ -185,80 +188,124 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
         provider_date_of_birth.setOnClickListener(this);
 
         //getting images
-        final String[]items=new String[]{"from camera","from sd card"};
-        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String >(getApplicationContext(),android.R.layout.select_dialog_item,items);
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        final String[] items = new String[]{"from camera", "from sd card"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item, items);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("select Image");
         builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(i==0) {
+                if (i == 0) {
                     try {
                         captureImage();
                         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                         startActivityForResult(intent, PICK_UP_CAM);
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else if(i==1) {
-                    Intent intent=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                } else if (i == 1) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
-                    startActivityForResult(intent.createChooser(intent,"select file"),PICK_FROM_FILE);
+                    startActivityForResult(intent.createChooser(intent, "select file"), PICK_FROM_FILE);
                 }
                 dialogInterface.cancel();
             }
         });
-        dialog=builder.create();
+        dialog = builder.create();
 
         //adding spinner items
         //adding main categoty spinner items
-        mainCategoryList.add("Services");
-        mainCategoryList.add("Hospital");
-        mainCategoryList.add("Matrimony");
-        mainCategoryList.add("1well Matrimony");
-        mainCategoryAdapter= new ArrayAdapter(this,android.R.layout.simple_spinner_item,mainCategoryList);
-        mainCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        providerService.setAdapter(mainCategoryAdapter);
+//        mainCategoryList.add("Services");
+//        mainCategoryList.add("Hospital");
+//        mainCategoryList.add("Matrimony");
+//        mainCategoryList.add("1well Matrimony");
+//        mainCategoryAdapter= new ArrayAdapter(this,android.R.layout.simple_spinner_item,mainCategoryList);
+//        mainCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        providerService.setAdapter(mainCategoryAdapter);
 
-        providerService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//        providerService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                TextView service = (TextView)parent.getSelectedView();
+//                 serviceMain =parent.getSelectedItemPosition();
+//                apiService= APIUrl.getApiClient().create(ApiService.class);
+//
+//                Call<List<Services>> call=apiService.getServices(serviceMain+1);
+//
+//                call.enqueue(new Callback<List<Services>>() {
+//                    @Override
+//                    public void onResponse(Call<List<Services>> call, Response<List<Services>> response) {
+//                        services_subCategory = response.body();
+//                        ArrayList<String> temp = new ArrayList<>();
+//                        if (services_subCategory.isEmpty())
+//                            return;
+//                        for (int i = 0; i < services_subCategory.size(); i++) {
+//                            temp.add(services_subCategory.get(i).getService());
+//
+//                            serviceSub= Integer.parseInt(services_subCategory.get(i).getService_id());
+//                        }
+//                        subCategoryAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, temp);
+//                        subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                        providerServiceSubCategory.setAdapter(subCategoryAdapter);
+//
+//                        Toast.makeText(getApplicationContext(),"Services "+temp,Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<Services>> call, Throwable t) {
+//
+//                    }
+//                });
+//
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+
+
+        providerServiceType.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TextView service = (TextView)parent.getSelectedView();
-                 serviceMain =parent.getSelectedItemPosition();
-                apiService= APIUrl.getApiClient().create(ApiService.class);
-
-                Call<List<Services>> call=apiService.getServices(serviceMain+1);
-
-                call.enqueue(new Callback<List<Services>>() {
-                    @Override
-                    public void onResponse(Call<List<Services>> call, Response<List<Services>> response) {
-                        services_subCategory = response.body();
-                        ArrayList<String> temp = new ArrayList<>();
-                        if (services_subCategory.isEmpty())
-                            return;
-                        for (int i = 0; i < services_subCategory.size(); i++) {
-                            temp.add(services_subCategory.get(i).getService());
-
-                            serviceSub= Integer.parseInt(services_subCategory.get(i).getService_id());
-                        }
-                        subCategoryAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, temp);
-                        subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        providerServiceSubCategory.setAdapter(subCategoryAdapter);
-
-                        Toast.makeText(getApplicationContext(),"Services "+temp,Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Services>> call, Throwable t) {
-
-                    }
-                });
-
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
+
+
+
+    }
+
+    private void filter(String text) {
+
+
+        apiService= APIUrl.getApiClient().create(ApiService.class);
+        Call<List<Services>> call=apiService.getServices(text);
+        call.enqueue(new Callback<List<Services>>() {
+            @Override
+            public void onResponse(Call<List<Services>> call, Response<List<Services>> response) {
+                services_tyeps=response.body();
+                if (response.body()==null)
+                    return;
+                ArrayList<String> temp = new ArrayList<>();
+                if (services_tyeps.isEmpty())
+                    return;
+                for (int i = 0; i < services_tyeps.size(); i++)
+                    temp.add(services_tyeps.get(i).getService());
+                  ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_multiple_choice,temp);
+                  providerServiceType.setThreshold(1);
+                  providerServiceType.setAdapter(adapter);
+            }
+            @Override
+            public void onFailure(Call<List<Services>> call, Throwable t) {
 
             }
         });
@@ -367,6 +414,14 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                 provider_date_of_birth.setError("Field cannot be blank");
                 return;
             }
+            if (TextUtils.isEmpty(providerServiceDescription.getText().toString())){
+                providerServiceDescription.setError("Field cannot be blank");
+                return;
+            }
+            if (providerServiceDescription.length()>15){
+                providerServiceDescription.setError("input field max 15 characters");
+                return;
+            }
 
 
             sharedPreference.writeProviderName(provider_signup_name.getText().toString());
@@ -378,11 +433,12 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
             provider_signup_name.setVisibility(View.GONE);
             provider_signup_phone.setVisibility(View.GONE);
             mSearchText.setVisibility(View.GONE);
-            providerService.setVisibility(View.GONE);
+            providerServiceDescription.setVisibility(View.GONE);
             provider_signup_website_url.setVisibility(View.GONE);
             provider_submit_personal_details.setVisibility(View.GONE);
-            providerServiceSubCategory.setVisibility(View.GONE);
+            providerServiceType.setVisibility(View.GONE);
             provider_date_of_birth.setVisibility(View.GONE);
+            agentRefId.setVisibility(View.GONE);
 
             radioGroupProvider.setVisibility(View.VISIBLE);
             provider_image.setVisibility(View.VISIBLE);
@@ -491,13 +547,14 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                             Log.e("phone",sharedPreference.readProviderPhone());
                             Log.e("latitude",latitude);
                             Log.e("longitude",longitude);
-                            Log.e("ser", String.valueOf(serviceMain));
-                            Log.e("dfs", String.valueOf(serviceSub));
+                           // Log.e("ser", String.valueOf(serviceMain));
+                           // Log.e("dfs", String.valueOf(serviceSub));
                             Log.e("gender", sharedPreference.readProviderWebsite());
                             Log.e("pic",imageToString(bmp));
                             Log.e("addres",mSearchText.getText().toString());
                             Log.e("dob",sharedPreference.readProviderDob());
                             Log.e("dob",sharedPreference.readProviderGender());
+                            Log.e("dob",providerServiceDescription.getText().toString());
                             Call<Status> call=apiService.ProviderRegistration(
                                     sharedPreference.readProviderName(),
                                     sharedPreference.readProviderPhone(),
@@ -506,15 +563,24 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                                     sharedPreference.readProviderGender(),
                                     imageToString(bmp),
                                     mSearchText.getText().toString(),
-                                    serviceMain,
-                                    serviceSub,
                                     "1WTOul0IBzwSF4EL",
                                     sharedPreference.readProviderDob(),
-                                    sharedPreference.readProviderWebsite() );
+                                    sharedPreference.readProviderWebsite(),
+                                    providerServiceType.getText().toString(),
+                                    providerServiceDescription.getText().toString());
+                                 //   providerServiceDescription.getText().toString());
                             call.enqueue(new Callback<Status>() {
                                 @Override
                                 public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
                                     loadingbar.dismiss();
+                                    if (response.body()==null)
+                                    {
+                                        Toast.makeText(getApplicationContext(), "some error was occured/please register again", Toast.LENGTH_LONG).show();
+                                        Intent agentLogin = new Intent(ProviderSignUpActivity.this, MainActivity.class);
+                                        startActivity(agentLogin);
+                                        finish();
+                                        return;
+                                    }
                                     Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                                     Intent agentLogin = new Intent(ProviderSignUpActivity.this, MainActivity.class);
                                     agentLogin.putExtra("provider registered", true);

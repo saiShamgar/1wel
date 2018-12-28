@@ -86,36 +86,46 @@
                     android:visibility="visible">
 
                 </AutoCompleteTextView>
-                <Spinner
-                    android:id="@+id/providerService"
+                <AutoCompleteTextView
+                    android:id="@+id/provider_services_type"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingTop="5dp"
+                    android:hint="Enter your service"
                     android:textSize="15sp"
+                    android:gravity="center_vertical"
                     android:layout_below="@+id/provider_signup_Location"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="15sp"
                     android:layout_marginBottom="5dp"
+                    android:background="@drawable/stroke_background"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:visibility="visible"
-                    android:background="@drawable/stroke_background"/>
-                <Spinner
-                    android:id="@+id/providerServiceSubCategory"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"/>
+                <EditText
+                    android:id="@+id/provider_service_descp"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingTop="5dp"
+                    android:hint="Service Description"
                     android:textSize="15sp"
-                    android:layout_below="@+id/providerService"
+                    android:gravity="center_vertical"
+                    android:layout_below="@+id/provider_services_type"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="15sp"
                     android:layout_marginBottom="5dp"
+                    android:background="@drawable/stroke_background"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:visibility="visible"
-                    android:background="@drawable/stroke_background"/>
+                    android:inputType="text"
+                    android:imeOptions="actionNext"/>
+
+
                 <EditText
                     android:id="@+id/provider_agentRefId"
                     android:layout_width="match_parent"
@@ -124,14 +134,13 @@
                     android:hint="Agent Reference Id"
                     android:textSize="15sp"
                     android:gravity="center_vertical"
-                    android:layout_below="@+id/providerServiceSubCategory"
+                    android:layout_below="@+id/provider_service_descp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="15sp"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/stroke_background"
                     android:paddingStart="10dp"
-                    android:drawableEnd="@drawable/ic_date_range_black_24dp"
                     android:paddingEnd="10dp"
                     android:visibility="visible"
                     android:inputType="date"

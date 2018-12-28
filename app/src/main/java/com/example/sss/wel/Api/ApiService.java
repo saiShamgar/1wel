@@ -1,6 +1,7 @@
 package com.example.sss.wel.Api;
 
 import com.example.sss.wel.Models.AgentRegistration;
+import com.example.sss.wel.Models.SearchItems;
 import com.example.sss.wel.Models.Services;
 import com.example.sss.wel.Models.Status;
 import com.example.sss.wel.Models.Test;
@@ -31,7 +32,11 @@ public interface ApiService {
     //api for getting all services
     @Headers("X-API-KEY:" + "SHANKAR@111")
     @GET("users_list/users/services/")
-    Call<List<Services>> getServices(@Query("service_type") int service);
+    //Call<Status> getServices(@Query("service_key") String service);
+    Call<List<Services>> getServices(@Query("service_key") String service);
+
+
+   // http://www.yesinteriors.online/1wel/users_list/users/services?service_key=cfsdsd
 
 
     //http://www.yesinteriors.online/1wel/users_list/users/reg?username=ramji
@@ -72,11 +77,11 @@ public interface ApiService {
             @Field("gender")String gender,
             @Field("profile_pic")String profile_pic,
             @Field("address")String address,
-            @Field("service_type")int service_type,
-            @Field("service_id")int service_id,
             @Field("referer_id")String referer_id,
             @Field("dob")String dob,
-            @Field("website_url")String website_url);
+            @Field("website_url")String website_url,
+            @Field("service")String service,
+            @Field("service_desc")String service_des);
 
 
     @Headers("X-API-KEY:" + "SHANKAR@111")
@@ -85,4 +90,30 @@ public interface ApiService {
     Call<Status> agent(@Part("username")RequestBody username,
                        @Part MultipartBody.Part photo);
 
+
+   //http://www.yesinteriors.online/1wel/users_list/users/usersearch
+
+    @Headers("X-API-KEY:" + "SHANKAR@111")
+    @FormUrlEncoded
+    @POST("users_list/users/usersearch/")
+    Call<List<SearchItems>> search(
+            @Field("latitude")String latitude,
+            @Field("longitude")String longitude,
+            @Field("service_key")String service);
+
+
+    @Headers("X-API-KEY:" + "SHANKAR@111")
+    @FormUrlEncoded
+    @POST("users_list/users/login/")
+    Call<Status> agentLogin(
+            @Field("username")String latitude,
+            @Field("password")String longitude);
+
+    @Headers("X-API-KEY:" + "SHANKAR@111")
+    @GET("users_list/users/logout/")
+    Call<Status> agentLogout();
+
+
 }
+
+

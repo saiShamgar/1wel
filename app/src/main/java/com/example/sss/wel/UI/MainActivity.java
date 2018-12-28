@@ -8,8 +8,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +27,7 @@ import com.example.sss.wel.Adapters.MainActivityRecyclerAdapter;
 import com.example.sss.wel.Adapters.PlaceAutocompleteAdapter;
 import com.example.sss.wel.Api.APIUrl;
 import com.example.sss.wel.Api.ApiService;
+import com.example.sss.wel.Models.SearchItems;
 import com.example.sss.wel.Models.Services;
 import com.example.sss.wel.R;
 import com.example.sss.wel.UI.Agent.AgentLoginActivity;
@@ -63,20 +67,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private Boolean mlocation_permission_granted = false;
 
     //widgets
-    private AutoCompleteTextView mSearchText;
+    private AutoCompleteTextView mSearchText,edt_search_items;
     private CircleImageView one_wel_logo;
-    private Button one_wel_agent,one_wel_provider;
-    private String  agent_reg;
-    private int services_main,services_sub;
-    private Spinner mainAcitivity_Category_Spinner,mainActivity_Sub_Category;
-    private ArrayAdapter mainCategoryAdapter,subCategoryAdapter;
+    private Button one_wel_agent,one_wel_provider,searchGo;
     ArrayList<String> mainCategoryList = new ArrayList<String>();
 
     //api interface
-    private List<Services> services_subCategory;
+     private List<Services> services_types;
+     private List<SearchItems> searchItems;
     private ApiService apiService;
     private RecyclerView recycler_view;
+    private MainActivityRecyclerAdapter adapter;
     private SharedPreferenceConfig sharedPreferenceConfig;
+
+    private String latitude,longitude;
 
 
     @Override
@@ -88,9 +92,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         one_wel_agent=findViewById(R.id.one_wel_agent);
         one_wel_provider=findViewById(R.id.one_wel_provider);
         one_wel_logo=findViewById(R.id.one_wel_logo);
-        mainAcitivity_Category_Spinner=findViewById(R.id.mainAcitivity_Category);
-        mainActivity_Sub_Category=findViewById(R.id.mainActivity_Sub_Category);
         recycler_view=findViewById(R.id.recycler_view);
+        edt_search_items=findViewById(R.id.edt_search_items);
+        searchGo=findViewById(R.id.searchGo);
         boolean defaultValue1 = false;
         boolean provider = getIntent().getBooleanExtra("provider registered", defaultValue1);
          if (sharedPreferenceConfig.readAgentLoggedin().contains("agent registered")){
@@ -141,58 +145,81 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         autocompleteAdapter=new PlaceAutocompleteAdapter(this,googleApiClient,LAT_LNG_BOUNDS,null);
         mSearchText.setAdapter(autocompleteAdapter);
 
-        //adding main categoty spinner items
-        mainCategoryList.add("Services");
-        mainCategoryList.add("Hospital");
-        mainCategoryList.add("Matrimony");
-        mainCategoryList.add("1well Matrimony");
-        mainCategoryAdapter= new ArrayAdapter(this,android.R.layout.simple_spinner_item,mainCategoryList);
-        mainCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mainAcitivity_Category_Spinner.setAdapter(mainCategoryAdapter);
 
-        mainAcitivity_Category_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        edt_search_items.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
 
+        //setting adapter
+        searchGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 apiService=APIUrl.getApiClient().create(ApiService.class);
-                services_main=parent.getSelectedItemPosition();
+                Call<List<SearchItems>> call=apiService.search(latitude,longitude,edt_search_items.getText().toString());
 
-                Call<List<Services>> call=apiService.getServices(services_main+1);
-                call.enqueue(new Callback<List<Services>>() {
+                call.enqueue(new Callback<List<SearchItems>>() {
                     @Override
-                    public void onResponse(Call<List<Services>> call, Response<List<Services>> response) {
-                        services_subCategory = response.body();
-                        ArrayList<String> temp = new ArrayList<>();
-                        if (services_subCategory.isEmpty())
-                        {
+                    public void onResponse(Call<List<SearchItems>> call, Response<List<SearchItems>> response) {
+                        searchItems=response.body();
+
+                        if (response.body()==null){
+                            Toast.makeText(getApplicationContext(),"no Providers Found",Toast.LENGTH_LONG).show();
                             return;
                         }
-                        temp.add("Select SubCategory");
-                        for (int i = 0; i < services_subCategory.size(); i++) {
-                            temp.add(services_subCategory.get(i).getService());
-                            services_sub= Integer.parseInt(services_subCategory.get(i).getService_id());
-                        }
-                        subCategoryAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, temp);
-                        subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        mainActivity_Sub_Category.setAdapter(subCategoryAdapter);
-                        //Toast.makeText(getApplicationContext(),"Services "+temp,Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getApplicationContext(),"items"+services_types,Toast.LENGTH_LONG).show();
+                        adapter=new MainActivityRecyclerAdapter(getApplicationContext(),searchItems);
+                        recycler_view.setHasFixedSize(true);
+                        recycler_view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        recycler_view.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
-                    public void onFailure(Call<List<Services>> call, Throwable t) {
+                    public void onFailure(Call<List<SearchItems>> call, Throwable t) {
 
                     }
                 });
-
-
             }
+        });
 
+
+    }
+
+    private void filter(String text) {
+        apiService= APIUrl.getApiClient().create(ApiService.class);
+        Call<List<Services>> call=apiService.getServices(text);
+        call.enqueue(new Callback<List<Services>>() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onResponse(Call<List<Services>> call, Response<List<Services>> response) {
+                services_types=response.body();
+                if (response.body()==null)
+                    return;
+                ArrayList<String> temp = new ArrayList<>();
+                if (services_types.isEmpty())
+                    return;
+                for (int i = 0; i < services_types.size(); i++)
+                    temp.add(services_types.get(i).getService());
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_multiple_choice,temp);
+                edt_search_items.setThreshold(1);
+                edt_search_items.setAdapter(adapter);
+            }
+            @Override
+            public void onFailure(Call<List<Services>> call, Throwable t) {
 
             }
         });
     }
+
+
 
 
     private void getLocationPermission() {
@@ -259,6 +286,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
             final Place mPlace = places.get(0);
             LatLng qLoc = mPlace.getLatLng();
+
+            latitude= String.valueOf(qLoc.latitude);
+            longitude= String.valueOf(qLoc.longitude);
+
 
             Toast.makeText(getApplicationContext(),"location "+qLoc,Toast.LENGTH_LONG).show();
             places.release();

@@ -39,8 +39,7 @@
             android:value="@string/places_key" />
 
         <activity android:name=".UI.providers.ProviderSignUpActivity" />
-        <activity android:name=".UI.Agent.AgentProfileSettings"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".UI.Agent.AgentProfileSettings"></activity>
     </application>
 
 </manifest>

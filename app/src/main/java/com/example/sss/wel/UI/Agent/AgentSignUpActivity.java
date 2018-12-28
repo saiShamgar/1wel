@@ -575,6 +575,12 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                                 @Override
                                 public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
                                     loadingbar.dismiss();
+                                    if (response.body()==null){
+                                        Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
+                                        startActivity(agentLogin);
+                                        finish();
+                                        return;
+                                    }
                                     Toast.makeText(getApplicationContext(),"status success "+response.body().getMessage(),Toast.LENGTH_LONG).show();
                                     Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
                                     startActivity(agentLogin);
