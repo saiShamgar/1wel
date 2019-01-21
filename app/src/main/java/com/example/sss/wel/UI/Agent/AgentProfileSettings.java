@@ -1,13 +1,13 @@
 package com.example.sss.wel.UI.Agent;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.sss.wel.Api.APIUrl;
@@ -23,25 +23,19 @@ import retrofit2.Response;
 public class AgentProfileSettings extends AppCompatActivity {
     private SharedPreferenceConfig sharedPreferenceConfig;
     private ApiService apiService;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_profile_settings);
         sharedPreferenceConfig=new SharedPreferenceConfig(this);
-
+        toolbar=(Toolbar)findViewById(R.id.agentProfileSettingsToolbar);
+        String Username = getIntent().getStringExtra("name");
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Agent profile");
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent bqack=new Intent(AgentProfileSettings.this, MainActivity.class);
-        bqack.putExtra("agent registered",true);
-        startActivity(bqack);
-        finish();
+        getSupportActionBar().setTitle(Username);
     }
 
     @Override
@@ -65,6 +59,10 @@ public class AgentProfileSettings extends AppCompatActivity {
                     }
                     Toast.makeText(getApplicationContext(),"responce "+response.body().getMessage(),Toast.LENGTH_LONG).show();
                     sharedPreferenceConfig.writeAgentLoggedIn("logout");
+                    SharedPreferences preferences=getApplicationContext().getSharedPreferences("userLog",MODE_PRIVATE);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    editor.clear();
+                    editor.commit();
                     Intent logout=new Intent(AgentProfileSettings.this,MainActivity.class);
                     startActivity(logout);
                     finish();
@@ -73,13 +71,9 @@ public class AgentProfileSettings extends AppCompatActivity {
                 public void onFailure(retrofit2.Call<Status> call, Throwable t) {
                 }
             });
-
-            if (item.getItemId()==android.R.id.home){
-                Intent bqack=new Intent(AgentProfileSettings.this, MainActivity.class);
-                bqack.putExtra("agent registered",true);
-                startActivity(bqack);
-                finish();
-            }
+        }
+        if (item.getItemId()==android.R.id.home){
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

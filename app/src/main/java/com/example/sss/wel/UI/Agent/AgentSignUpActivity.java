@@ -53,6 +53,8 @@ import com.example.sss.wel.Models.Status;
 import com.example.sss.wel.Models.Test;
 import com.example.sss.wel.R;
 import com.example.sss.wel.UI.MainActivity;
+import com.example.sss.wel.UI.PaymentActivity;
+import com.example.sss.wel.UI.providers.ProviderSignUpActivity;
 import com.example.sss.wel.Utils.SharedPreferenceConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
@@ -94,10 +96,11 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit.RestAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.Field;
+
+import static com.example.sss.wel.Api.APIUrl.retrofit;
 
 
 public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener{
@@ -157,8 +160,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_sign_up);
         getLocationPermission();
-
-
         fn_permission();
 
         mAuth=FirebaseAuth.getInstance();
@@ -317,9 +318,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             LatLng qLoc = mPlace.getLatLng();
              latitude= String.valueOf(qLoc.latitude);
              longitude= String.valueOf(qLoc.longitude);
-
-
-
             Toast.makeText(getApplicationContext(),"location "+qLoc,Toast.LENGTH_LONG).show();
             places.release();
         }
@@ -370,16 +368,11 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
 
             }
 
-
-
             //Storing values
             sharedPreference.writeAgentEmail(agent_signup_name.getText().toString());
             sharedPreference.writeAgentphone(agent_signup_phone.getText().toString());
             sharedPreference.writeAgentLocation(mSearchText.getText().toString());
             sharedPreference.writeAgentPassword(agent_signup_confirm_pass.getText().toString());
-
-
-
 
             agent_signup_name.setVisibility(View.GONE);
             agent_signup_phone.setVisibility(View.GONE);
@@ -395,23 +388,8 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             agent_signup_Bank_Ifsc_Code.setVisibility(View.VISIBLE);
             agent_signup_Pan_number.setVisibility(View.VISIBLE);
             agent_submit_bank_details.setVisibility(View.VISIBLE);
-//            apiService=APIUrl.getApiClient().create(ApiService.class);
-//            Call<Test> call=apiService.agentRegistration1("sai",
-//                    new Callback<Status>() {
-//                        @Override
-//                        public void onResponse(Call<Status> call, Response<Status> response) {
-//                            Toast.makeText(getApplicationContext(),"succes"+response.body().getMessage(),Toast.LENGTH_LONG).show();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Status> call, Throwable t) {
-//
-//                        }
-//                    });
 
-
-
-        }
+            }
         if (v.getId()==R.id.agent_submit_bank_details){
 
 //            if (TextUtils.isEmpty(agent_signup_AadharNum.getText().toString())){
@@ -484,6 +462,15 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         if (v.getId()==R.id.upload_image_agent){
             dialog.show();
         }
+        if (v.getId()==R.id.agent_verification_btn){
+
+            loadingbar.setTitle("Phone verification");
+            loadingbar.setMessage("please wait,while we are authenticating with your phone");
+            loadingbar.setCanceledOnTouchOutside(false);
+            loadingbar.show();
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, agent_signup_virification.getText().toString());
+            signInWithPhoneAuthCredential(credential);
+        }
 
 
         callbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -503,7 +490,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                 upload_image_agent.setVisibility(View.VISIBLE);
                 agent_reg_submit_btn.setVisibility(View.VISIBLE);
                 agent_reg_submit_btn.setText("Re-submit");
-
 
                 txt_otp_hint.setVisibility(View.GONE);
                 agent_signup_virification.setVisibility(View.GONE);
@@ -540,73 +526,25 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.e("email",sharedPreference.readAgentEmail());
-                            Log.e("phone",sharedPreference.readAgentPhone());
-                            Log.e("latitude",latitude);
-                            Log.e("longitude",longitude);
-                            Log.e("pass",sharedPreference.readAgentPassword());
-                            Log.e("aadhar",sharedPreference.readAgentAadhar());
-                            Log.e("bank name",sharedPreference.readAgentBankName());
-                            Log.e("bank num",sharedPreference.readAgentBankNumber());
-                            Log.e("bank ifsc",sharedPreference.readAgentBankIfsc());
-                            Log.e("pan num",agent_signup_Pan_number.getText().toString());
-                            Log.e("gender",sharedPreference.readAgentGender());
-                            Log.e("pic",imageToString(bmp));
-                            Log.e("addres",mSearchText.getText().toString());
-                            Log.e("dob",sharedPreference.readAgentDob());
-
-                            apiService=APIUrl.getApiClient().create(ApiService.class);
-                            Call<Status> call=apiService.agentRegistration(
-                                    sharedPreference.readAgentEmail(),
-                                    sharedPreference.readAgentPhone(),
-                                    latitude,
-                                    longitude,
-                                    sharedPreference.readAgentPassword(),
-                                    sharedPreference.readAgentAadhar(),
-                                    sharedPreference.readAgentBankName(),
-                                    sharedPreference.readAgentBankNumber(),
-                                    sharedPreference.readAgentBankIfsc(),
-                                    agent_signup_Pan_number.getText().toString(),
-                                    sharedPreference.readAgentGender(),
-                                    imageToString(bmp),
-                                    mSearchText.getText().toString(),
-                                    sharedPreference.readAgentDob());
-                            call.enqueue(new Callback<Status>() {
-                                @Override
-                                public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
-                                    loadingbar.dismiss();
-                                    if (response.body()==null){
-                                        Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
-                                        startActivity(agentLogin);
-                                        finish();
-                                        return;
-                                    }
-                                    Toast.makeText(getApplicationContext(),"status success "+response.body().getMessage(),Toast.LENGTH_LONG).show();
-                                    Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
-                                    startActivity(agentLogin);
-                                    finish();
-                                    sharedPreference.writeAgentLoggedIn("agent registered");
-                                }
-
-                                @Override
-                                public void onFailure(Call<Status> call, Throwable t) {
-                                    loadingbar.dismiss();
-                                }
-                            });
-
-
-
-
-
-                            } else {
+                            loadingbar.dismiss();
+                            double cost=100;
+                            Intent payment=new Intent(AgentSignUpActivity.this, PaymentActivity.class);
+                            payment.putExtra("phone",sharedPreference.readAgentPhone());
+                            payment.putExtra("cost",cost);
+                            payment.putExtra("user_type","agent");
+                            payment.putExtra("latitude",latitude);
+                            payment.putExtra("longitude",longitude);
+                            payment.putExtra("pan_num",agent_signup_Pan_number.getText().toString());
+                            payment.putExtra("address",mSearchText.getText().toString());
+                            startActivity(payment);
+                            finish();
+                            }
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
+                                loadingbar.dismiss();
                             }
-                        }
                     }
                 });
-
-
     }
 
     //image uploading code
@@ -629,13 +567,14 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                 Bundle bundle=data.getExtras();
                 bmp=(Bitmap)bundle.get("data");
                 agent_image.setImageBitmap(bmp);
+                sharedPreference.writeAgentPic(imageToString(bmp));
             }
             else if(requestCode==PICK_FROM_FILE) {
                 imagecaptureuri=data.getData();
                 try {
                     bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imagecaptureuri);
-
                     Log.e("bitmap", bmp.toString());
+                    sharedPreference.writeAgentPic(imageToString(bmp));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -643,12 +582,8 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                         .load(imagecaptureuri)
                         .into(agent_image);
             }
-
         }
-
     }
-
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();

@@ -1,21 +1,16 @@
 package com.example.sss.wel.Api;
 
-import com.example.sss.wel.Models.AgentRegistration;
+import com.example.sss.wel.Models.AgentData;
 import com.example.sss.wel.Models.SearchItems;
 import com.example.sss.wel.Models.Services;
 import com.example.sss.wel.Models.Status;
-import com.example.sss.wel.Models.Test;
 
 import java.util.List;
 
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit.client.Request;
-import retrofit.client.Response;
 import retrofit2.Call;
-
-import retrofit2.Callback;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -25,7 +20,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 
-import static com.example.sss.wel.Api.APIUrl.retrofit;
 
 public interface ApiService {
 
@@ -36,9 +30,7 @@ public interface ApiService {
     Call<List<Services>> getServices(@Query("service_key") String service);
 
 
-   // http://www.yesinteriors.online/1wel/users_list/users/services?service_key=cfsdsd
-
-
+    // http://www.yesinteriors.online/1wel/users_list/users/services?service_key=cfsdsd
     //http://www.yesinteriors.online/1wel/users_list/users/reg?username=ramji
     // &password=666666&phone=6534545&address=viskahpatnam&
     // profile_pic=fgsdfgd&user_type=1&latitude=17.743210&
@@ -105,15 +97,15 @@ public interface ApiService {
     @Headers("X-API-KEY:" + "SHANKAR@111")
     @FormUrlEncoded
     @POST("users_list/users/login/")
-    Call<Status> agentLogin(
-            @Field("username")String latitude,
-            @Field("password")String longitude);
+    Call<AgentData> agentLogin(
+            @Field("username")String username,
+            @Field("password")String password);
 
     @Headers("X-API-KEY:" + "SHANKAR@111")
     @GET("users_list/users/logout/")
     Call<Status> agentLogout();
 
-
+    //http://www.yesinteriors.online/1wel/users_list/users/login
 }
 
 

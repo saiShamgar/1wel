@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">1Wel</string>
     <string name="places_key">AIzaSyDSw2E4sphfTp4veFpNiEX1HMc2awl-TxE</string>
-    <string name="razorpaykeytext">rzp_test_XZhkhiMzBkJjZfN</string>
+    <string name="razorpaykeytext">rzp_test_XZhkhiMzBkJjZf</string>
     <string name="razorpaykeyLive">rzp_live_ES25AxnwXmZbHA</string>
 
     //preferences agent

@@ -3,22 +3,22 @@
     package="com.example.sss.wel">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".Api.AppController"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/one_wel_loge"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".Api.AppController">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".UI.SplashScreenActivity"
             android:theme="@style/AppTheme1">
@@ -39,7 +39,16 @@
             android:value="@string/places_key" />
 
         <activity android:name=".UI.providers.ProviderSignUpActivity" />
-        <activity android:name=".UI.Agent.AgentProfileSettings"></activity>
+        <activity
+            android:name=".UI.Agent.AgentProfileSettings"
+            android:parentActivityName=".UI.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".UI.BlockSearchItemActivity"></activity>
+        <activity android:name=".UI.PaymentActivity"></activity>
+
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="@string/razorpaykeytext"/>
     </application>
 
 </manifest>

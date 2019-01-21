@@ -7,9 +7,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".UI.MainActivity">
-
-
-
     <android.support.design.widget.AppBarLayout
         android:layout_height="160dp"
         android:layout_width="match_parent">
@@ -38,7 +35,7 @@
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="10dp"
-                android:src="@drawable/spiderman"/>
+                android:src="@drawable/one_wel" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,23 +50,36 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-            <Button
+            <TextView
                 android:layout_toLeftOf="@+id/one_wel_provider"
                 android:id="@+id/one_wel_agent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="Agent"
                 android:textAllCaps="false"
-                />
-            <Button
+                android:background="@drawable/white_round_background"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingEnd="15sp"
+                android:paddingStart="15sp"/>
+            <TextView
                 android:layout_alignParentEnd="true"
                 android:id="@+id/one_wel_provider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="Provider"
-                android:textAllCaps="false" />
+                android:background="@drawable/white_round_background"
+                android:textAllCaps="false"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingEnd="15sp"
+                android:paddingStart="15sp"/>
                 </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>
@@ -116,13 +126,22 @@
                         android:textColor="@color/white"
                         android:textColorHint="@color/white"
                         android:textSize="14sp"/>
-                    <Button
+                    <TextView
                        android:layout_toRightOf="@+id/edt_search_items"
                         android:layout_below="@+id/mainActivity_location"
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:text="Go"
-                       android:id="@+id/searchGo"/>
+                        android:background="@drawable/white_round_background"
+                       android:id="@+id/searchGo"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingEnd="20sp"
+                        android:paddingStart="20sp"
+                        android:gravity="center"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/colorPrimaryDark"/>
 
                 </RelativeLayout>
 

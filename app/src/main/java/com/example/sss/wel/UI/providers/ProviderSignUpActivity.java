@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -45,6 +46,7 @@ import com.example.sss.wel.R;
 import com.example.sss.wel.UI.Agent.AgentLoginActivity;
 import com.example.sss.wel.UI.Agent.AgentSignUpActivity;
 import com.example.sss.wel.UI.MainActivity;
+import com.example.sss.wel.UI.PaymentActivity;
 import com.example.sss.wel.Utils.SharedPreferenceConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -65,6 +67,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -186,12 +190,13 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
         upload_image_provider.setOnClickListener(this);
         provider_reg_submit_btn.setOnClickListener(this);
         provider_date_of_birth.setOnClickListener(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //getting images
         final String[] items = new String[]{"from camera", "from sd card"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item, items);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("select Image");
         builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -212,60 +217,6 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
             }
         });
         dialog = builder.create();
-
-        //adding spinner items
-        //adding main categoty spinner items
-//        mainCategoryList.add("Services");
-//        mainCategoryList.add("Hospital");
-//        mainCategoryList.add("Matrimony");
-//        mainCategoryList.add("1well Matrimony");
-//        mainCategoryAdapter= new ArrayAdapter(this,android.R.layout.simple_spinner_item,mainCategoryList);
-//        mainCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        providerService.setAdapter(mainCategoryAdapter);
-
-//        providerService.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                TextView service = (TextView)parent.getSelectedView();
-//                 serviceMain =parent.getSelectedItemPosition();
-//                apiService= APIUrl.getApiClient().create(ApiService.class);
-//
-//                Call<List<Services>> call=apiService.getServices(serviceMain+1);
-//
-//                call.enqueue(new Callback<List<Services>>() {
-//                    @Override
-//                    public void onResponse(Call<List<Services>> call, Response<List<Services>> response) {
-//                        services_subCategory = response.body();
-//                        ArrayList<String> temp = new ArrayList<>();
-//                        if (services_subCategory.isEmpty())
-//                            return;
-//                        for (int i = 0; i < services_subCategory.size(); i++) {
-//                            temp.add(services_subCategory.get(i).getService());
-//
-//                            serviceSub= Integer.parseInt(services_subCategory.get(i).getService_id());
-//                        }
-//                        subCategoryAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_item, temp);
-//                        subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                        providerServiceSubCategory.setAdapter(subCategoryAdapter);
-//
-//                        Toast.makeText(getApplicationContext(),"Services "+temp,Toast.LENGTH_LONG).show();
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<Services>> call, Throwable t) {
-//
-//                    }
-//                });
-//
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
 
         providerServiceType.addTextChangedListener(new TextWatcher() {
             @Override
@@ -422,8 +373,6 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                 providerServiceDescription.setError("input field max 15 characters");
                 return;
             }
-
-
             sharedPreference.writeProviderName(provider_signup_name.getText().toString());
             sharedPreference.writeProviderPhone(provider_signup_phone.getText().toString());
             sharedPreference.writeProviderLocation(mSearchText.getText().toString());
@@ -525,81 +474,87 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            loadingbar.dismiss();
 
-//                            Log.e("email",sharedPreference.readAgentEmail());
-//                            Log.e("phone",sharedPreference.readAgentPhone());
+                            double cost;
+                            if (TextUtils.isEmpty(provider_signup_website_url.getText().toString())){
+                                cost=100;
+                            }else {
+                                cost=500;
+                            }
+
+                            Intent payment=new Intent(ProviderSignUpActivity.this, PaymentActivity.class);
+                            payment.putExtra("phone",sharedPreference.readProviderPhone());
+                            payment.putExtra("cost",cost);
+                            payment.putExtra("user_type","provider");
+                            payment.putExtra("latitude",latitude);
+                            payment.putExtra("longitude",longitude);
+                            payment.putExtra("address",mSearchText.getText().toString());
+                            payment.putExtra("service_type",providerServiceType.getText().toString());
+                            payment.putExtra("service_descp",providerServiceDescription.getText().toString());
+
+                            startActivity(payment);
+                            finish();
+
+//                            apiService=APIUrl.getApiClient().create(ApiService.class);
+//
+//                            Log.e("email",sharedPreference.readProviderName());
+//                            Log.e("phone",sharedPreference.readProviderPhone());
 //                            Log.e("latitude",latitude);
 //                            Log.e("longitude",longitude);
-//                            Log.e("pass",sharedPreference.readAgentPassword());
-//                            Log.e("aadhar",sharedPreference.readAgentAadhar());
-//                            Log.e("bank name",sharedPreference.readAgentBankName());
-//                            Log.e("bank num",sharedPreference.readAgentBankNumber());
-//                            Log.e("bank ifsc",sharedPreference.readAgentBankIfsc());
-//                            Log.e("pan num",agent_signup_Pan_number.getText().toString());
-//                            Log.e("gender",sharedPreference.readAgentGender());
+//                           // Log.e("ser", String.valueOf(serviceMain));
+//                           // Log.e("dfs", String.valueOf(serviceSub));
+//                            Log.e("gender", sharedPreference.readProviderWebsite());
 //                            Log.e("pic",imageToString(bmp));
 //                            Log.e("addres",mSearchText.getText().toString());
-//                            Log.e("dob",sharedPreference.readAgentDob());
-
-                            apiService=APIUrl.getApiClient().create(ApiService.class);
-
-                            Log.e("email",sharedPreference.readProviderName());
-                            Log.e("phone",sharedPreference.readProviderPhone());
-                            Log.e("latitude",latitude);
-                            Log.e("longitude",longitude);
-                           // Log.e("ser", String.valueOf(serviceMain));
-                           // Log.e("dfs", String.valueOf(serviceSub));
-                            Log.e("gender", sharedPreference.readProviderWebsite());
-                            Log.e("pic",imageToString(bmp));
-                            Log.e("addres",mSearchText.getText().toString());
-                            Log.e("dob",sharedPreference.readProviderDob());
-                            Log.e("dob",sharedPreference.readProviderGender());
-                            Log.e("dob",providerServiceDescription.getText().toString());
-                            Call<Status> call=apiService.ProviderRegistration(
-                                    sharedPreference.readProviderName(),
-                                    sharedPreference.readProviderPhone(),
-                                    latitude,
-                                    longitude,
-                                    sharedPreference.readProviderGender(),
-                                    imageToString(bmp),
-                                    mSearchText.getText().toString(),
-                                    "1WTOul0IBzwSF4EL",
-                                    sharedPreference.readProviderDob(),
-                                    sharedPreference.readProviderWebsite(),
-                                    providerServiceType.getText().toString(),
-                                    providerServiceDescription.getText().toString());
-                                 //   providerServiceDescription.getText().toString());
-                            call.enqueue(new Callback<Status>() {
-                                @Override
-                                public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
-                                    loadingbar.dismiss();
-                                    if (response.body()==null)
-                                    {
-                                        Toast.makeText(getApplicationContext(), "some error was occured/please register again", Toast.LENGTH_LONG).show();
-                                        Intent agentLogin = new Intent(ProviderSignUpActivity.this, MainActivity.class);
-                                        startActivity(agentLogin);
-                                        finish();
-                                        return;
-                                    }
-                                    Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
-                                    Intent agentLogin = new Intent(ProviderSignUpActivity.this, MainActivity.class);
-                                    agentLogin.putExtra("provider registered", true);
-                                    startActivity(agentLogin);
-                                    finish();
-                                }
-
-                                @Override
-                                public void onFailure(Call<Status> call, Throwable t) {
-                                    loadingbar.dismiss();
-                                }
-                            });
-
-
-
+//                            Log.e("dob",sharedPreference.readProviderDob());
+//                            Log.e("dob",sharedPreference.readProviderGender());
+//                            Log.e("dob",providerServiceDescription.getText().toString());
+//                            Call<Status> call=apiService.ProviderRegistration(
+//                                    sharedPreference.readProviderName(),
+//                                    sharedPreference.readProviderPhone(),
+//                                    latitude,
+//                                    longitude,
+//                                    sharedPreference.readProviderGender(),
+//                                    imageToString(bmp),
+//                                    mSearchText.getText().toString(),
+//                                    "1WTOul0IBzwSF4EL",
+//                                    sharedPreference.readProviderDob(),
+//                                    sharedPreference.readProviderWebsite(),
+//                                    providerServiceType.getText().toString(),
+//                                    providerServiceDescription.getText().toString());
+//                                 //   providerServiceDescription.getText().toString());
+//                            call.enqueue(new Callback<Status>() {
+//                                @Override
+//                                public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
+//                                    loadingbar.dismiss();
+//                                    if (response.body()==null)
+//                                    {
+//                                        Toast.makeText(getApplicationContext(), "some error was occured/please register again", Toast.LENGTH_LONG).show();
+//                                        Intent agentLogin = new Intent(ProviderSignUpActivity.this, MainActivity.class);
+//                                        startActivity(agentLogin);
+//                                        finish();
+//                                        return;
+//                                    }
+//                                    Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+//                                    Intent agentLogin = new Intent(ProviderSignUpActivity.this, MainActivity.class);
+//                                    agentLogin.putExtra("provider registered", true);
+//                                    startActivity(agentLogin);
+//                                    finish();
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<Status> call, Throwable t) {
+//                                    loadingbar.dismiss();
+//                                }
+//                            });
 
                             //sendUserToMainActivity();
+
+
                         } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                loadingbar.dismiss();
                                 // The verification code entered was invalid
                             }
                         }
@@ -627,6 +582,7 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                 Bundle bundle=data.getExtras();
                 bmp=(Bitmap)bundle.get("data");
                 provider_image.setImageBitmap(bmp);
+                sharedPreference.writeProviderPic(imageToString(bmp));
             }
             else if(requestCode==PICK_FROM_FILE) {
                 imagecaptureuri=data.getData();
@@ -638,7 +594,7 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                 Glide.with(this)
                         .load(imagecaptureuri)
                         .into(provider_image);
-
+                sharedPreference.writeProviderPic(imageToString(bmp));
             }
 
         }
@@ -654,5 +610,22 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
         return Base64.encodeToString(imgbyte,Base64.DEFAULT);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        if (item.getItemId()==android.R.id.home){
+            Intent back=new Intent(ProviderSignUpActivity.this,MainActivity.class);
+            startActivity(back);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent back=new Intent(ProviderSignUpActivity.this,MainActivity.class);
+        startActivity(back);
+        finish();
+    }
 }

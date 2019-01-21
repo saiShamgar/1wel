@@ -2,27 +2,31 @@ package com.example.sss.wel.UI;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.sss.wel.Adapters.MainActivityRecyclerAdapter;
 import com.example.sss.wel.Adapters.PlaceAutocompleteAdapter;
 import com.example.sss.wel.Api.APIUrl;
@@ -69,8 +73,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     //widgets
     private AutoCompleteTextView mSearchText,edt_search_items;
     private CircleImageView one_wel_logo;
-    private Button one_wel_agent,one_wel_provider,searchGo;
+    private TextView one_wel_agent,one_wel_provider,searchGo;
     ArrayList<String> mainCategoryList = new ArrayList<String>();
+    private ImageButton searchItemBlockOption;
 
     //api interface
      private List<Services> services_types;
@@ -95,16 +100,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         recycler_view=findViewById(R.id.recycler_view);
         edt_search_items=findViewById(R.id.edt_search_items);
         searchGo=findViewById(R.id.searchGo);
+
         boolean defaultValue1 = false;
         boolean provider = getIntent().getBooleanExtra("provider registered", defaultValue1);
+
          if (sharedPreferenceConfig.readAgentLoggedin().contains("agent registered")){
              one_wel_agent.setVisibility(View.GONE);
+             SharedPreferences preferences=getApplicationContext().getSharedPreferences("userLog",MODE_PRIVATE);
+             String image=preferences.getString("image",null);
+             final String name=preferences.getString("name",null);
+             Glide.with(this).load(image).placeholder(R.drawable.one_wel_loge).into(one_wel_logo);
              one_wel_logo.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
                      Intent profileSettings=new Intent(MainActivity.this, AgentProfileSettings.class);
+                     profileSettings.putExtra("name",name);
                      startActivity(profileSettings);
-                     finish();
                  }
              });
          }
@@ -128,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 finish();
             }
         });
-
 
         getLocationPermission();
 
@@ -180,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         recycler_view.setHasFixedSize(true);
                         recycler_view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         recycler_view.setAdapter(adapter);
+                        recycler_view.setNestedScrollingEnabled(false);
                         adapter.notifyDataSetChanged();
                     }
 
@@ -190,8 +201,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 });
             }
         });
-
-
     }
 
     private void filter(String text) {

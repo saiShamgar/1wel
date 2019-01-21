@@ -193,6 +193,20 @@ public class SharedPreferenceConfig {
         return gender;
     }
 
+    public void writeProviderPic(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_pic_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderPic(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_pic_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
     public void writeProviderName(String gender){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(context.getResources().getString(R.string.provider_name_preference), gender);

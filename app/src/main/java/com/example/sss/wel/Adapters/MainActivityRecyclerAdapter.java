@@ -1,13 +1,19 @@
 package com.example.sss.wel.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sss.wel.Models.SearchItems;
 import com.example.sss.wel.Models.Services;
 import com.example.sss.wel.R;
+import com.example.sss.wel.UI.BlockSearchItemActivity;
 import com.example.sss.wel.UI.providers.ProviderSignUpActivity;
 
 import java.security.PrivateKey;
@@ -63,6 +70,28 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(holder.search_item_image);
         }
+
+        holder.searchItemBlockOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final PopupMenu pm = new PopupMenu(context, v);
+                pm.getMenuInflater().inflate(R.menu.post_popup_menu, pm.getMenu());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    pm.setGravity(Gravity.END);
+                }
+                pm.show();
+
+                pm.getMenu().findItem(R.id.invite).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        Intent block=new Intent(context, BlockSearchItemActivity.class);
+                        context.startActivity(block);
+                        return false;
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -75,6 +104,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
 
         private TextView search_name_db,search_category_from_db,search_phone_from_db,search_address_fromdb,search_websiteUrl_from_db,search_desp;
         private ImageView search_item_image;
+        private ImageButton searchItemBlockOption;
 
         public MainActivityViewHolder(View itemView) {
             super(itemView);
@@ -86,6 +116,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
             search_websiteUrl_from_db=itemView.findViewById(R.id.search_websiteUrl_from_db);
             search_desp=itemView.findViewById(R.id.search_desp);
             search_item_image=itemView.findViewById(R.id.search_item_image);
+            searchItemBlockOption=itemView.findViewById(R.id.searchItemBlockOption);
         }
     }
 }
