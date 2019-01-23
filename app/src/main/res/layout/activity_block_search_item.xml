@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.BlockSearchItemActivity">
+    tools:context=".UI.BlockSearchItemActivity"
+    android:orientation="vertical">
+
+    <EditText android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Enter registered number"
+        android:ems="15"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:textSize="20sp"
+        android:typeface="sans"
+        android:id="@+id/reg_num"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:visibility="visible"/>
+
+    <EditText android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Enter Your Otp"
+        android:ems="15"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:textSize="20sp"
+        android:typeface="sans"
+        android:id="@+id/reg_otp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:visibility="gone"/>
+
+    <Button android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/green_round_background"
+        android:textColor="@color/white"/>
+
+    <Button android:id="@+id/verify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Verify"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/green_round_background"
+        android:textColor="@color/white"
+        android:visibility="gone"/>
 
 
 
-</android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

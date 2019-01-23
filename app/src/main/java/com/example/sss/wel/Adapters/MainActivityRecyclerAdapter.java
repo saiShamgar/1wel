@@ -5,16 +5,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.CircularProgressDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -26,6 +31,8 @@ import com.example.sss.wel.UI.providers.ProviderSignUpActivity;
 
 import java.security.PrivateKey;
 import java.util.List;
+
+import javax.xml.validation.Validator;
 
 public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivityRecyclerAdapter.MainActivityViewHolder> {
 
@@ -48,7 +55,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MainActivityViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MainActivityViewHolder holder, final int position) {
 
         holder.search_name_db.setText(searchItems.get(position).getName());
         holder.search_category_from_db.setText(searchItems.get(position).getService());
@@ -65,7 +72,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
             Glide.with(context)
                     .load(searchItems.get(position).getImage())
                     .placeholder(circularProgressDrawable)
-                    .error(R.drawable.batman)
+                    .error(R.drawable.one_wel_loge)
                     // read original from cache (if present) otherwise download it and decode it
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(holder.search_item_image);
@@ -86,6 +93,8 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
                     public boolean onMenuItemClick(MenuItem item) {
 
                         Intent block=new Intent(context, BlockSearchItemActivity.class);
+                        block.putExtra("user_id",searchItems.get(position).getUser_id());
+                        block.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity(block);
                         return false;
                     }
@@ -94,7 +103,8 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
         });
     }
 
-    @Override
+
+        @Override
     public int getItemCount() {
         return searchItems.size();
     }

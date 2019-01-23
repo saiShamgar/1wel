@@ -16,7 +16,8 @@
             android:id="@+id/fl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="30dp">
+            android:paddingTop="30dp"
+            android:focusableInTouchMode="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -24,7 +25,8 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
-                android:background="@drawable/white_round_background">
+                android:background="@drawable/white_round_background"
+                android:focusableInTouchMode="true">
 
                 //personal details
 
@@ -33,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="80dp"
-                    android:hint="Enter your email"
+                    android:hint="Enter your username"
                     android:layout_centerHorizontal="true"
                     android:textSize="15sp"
                     android:layout_marginStart="50sp"
@@ -68,6 +70,7 @@
                     android:id="@+id/agent_signup_Location"
                     android:layout_height="50dp"
                     android:inputType="text|textMultiLine"
+                    android:imeOptions="actionNext"
                     android:layout_width="match_parent"
                     android:maxLines="2"
                     android:layout_marginRight="10dp"
@@ -120,7 +123,7 @@
                     android:background="@drawable/stroke_background"
                     android:paddingStart="10dp"
                     android:inputType="textPassword"
-                    android:imeOptions="actionDone"
+                    android:imeOptions="actionNext"
                     android:drawableEnd="@drawable/ic_lock_black_24dp"
                     android:paddingEnd="10dp"
                     android:visibility="visible"/>
@@ -210,6 +213,24 @@
                     android:paddingEnd="10dp"
                     android:visibility="gone"
                     android:layout_marginTop="10dp" />
+
+                <EditText
+                    android:id="@+id/agent_signup_ReEnterBank_Account_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="re-enter your Bank A/c no"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp"
+                    android:layout_below="@+id/agent_signup_Bank_Account_num"
+                    android:layout_marginStart="50sp"
+                    android:background="@drawable/stroke_background"
+                    android:paddingStart="10dp"
+                    android:inputType="number"
+                    android:imeOptions="actionNext"
+                    android:drawableEnd="@drawable/ic_security_black_24dp"
+                    android:paddingEnd="10dp"
+                    android:visibility="gone"
+                    android:layout_marginTop="10dp" />
                 <EditText
                     android:id="@+id/agent_signup_Bank_Ifsc_Code"
                     android:layout_width="match_parent"
@@ -217,7 +238,7 @@
                     android:hint="Enter your Bank Ifsc code"
                     android:layout_centerHorizontal="true"
                     android:textSize="15sp"
-                    android:layout_below="@+id/agent_signup_Bank_Account_num"
+                    android:layout_below="@+id/agent_signup_ReEnterBank_Account_num"
                     android:layout_marginStart="50sp"
                     android:background="@drawable/stroke_background"
                     android:paddingStart="10dp"
@@ -227,25 +248,6 @@
                     android:paddingEnd="10dp"
                     android:visibility="gone"
                     android:layout_marginTop="10dp" />
-
-                <EditText
-                    android:id="@+id/agent_signup_Pan_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:hint="Enter your Pan number"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="15sp"
-                    android:layout_below="@+id/agent_signup_Bank_Ifsc_Code"
-                    android:layout_marginStart="50sp"
-                    android:background="@drawable/stroke_background"
-                    android:paddingStart="10dp"
-                    android:inputType="text"
-                    android:imeOptions="actionNext"
-                    android:drawableEnd="@drawable/ic_security_black_24dp"
-                    android:paddingEnd="10dp"
-                    android:visibility="gone"
-                    android:layout_marginTop="10dp" />
-
                 <Button
                     android:id="@+id/agent_submit_bank_details"
                     android:layout_width="wrap_content"
@@ -257,7 +259,7 @@
                     android:textColor="@color/white"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"
-                    android:layout_below="@+id/agent_signup_Pan_number"
+                    android:layout_below="@+id/agent_signup_Bank_Ifsc_Code"
                     android:background="@drawable/green_round_background"
                     android:visibility="gone" />
 
@@ -290,7 +292,7 @@
                     android:layout_below="@+id/radioGroup"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/batman"
+                    android:src="@drawable/ic_person_black_24dp"
                     android:scaleType="fitXY"
                     android:layout_margin="5dp"
                     android:visibility="gone"/>
@@ -346,7 +348,7 @@
                     android:background="@drawable/stroke_background"
                     android:paddingStart="10dp"
                     android:inputType="number"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:drawableEnd="@drawable/ic_lock_black_24dp"
                     android:paddingEnd="10dp"
                     android:visibility="gone"
@@ -376,7 +378,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/batman"/>
+                android:src="@drawable/one_wel"/>
         </FrameLayout>
 
 

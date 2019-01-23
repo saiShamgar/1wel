@@ -190,8 +190,11 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
         upload_image_provider.setOnClickListener(this);
         provider_reg_submit_btn.setOnClickListener(this);
         provider_date_of_birth.setOnClickListener(this);
+        provider_verification_btn.setOnClickListener(this);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Provider SignUp");
 
         //getting images
         final String[] items = new String[]{"from camera", "from sd card"};
@@ -319,7 +322,7 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
         @Override
         public void onResult(@NonNull PlaceBuffer places) {
             if (!places.getStatus().isSuccess()) {
-                Log.d(TAG,"onresult : place Query did not complete Successfully  "+places.getStatus().toString());
+                Log.d(TAG,"on result : place Query did not complete Successfully  "+places.getStatus().toString());
 
                 //you can use lat with qLoc.latitude;
                 //and long with qLoc.longitude;
@@ -361,8 +364,8 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                 mSearchText.setError("Field cannot be blank");
                 return;
             }
-            if (TextUtils.isEmpty(provider_date_of_birth.getText().toString())){
-                provider_date_of_birth.setError("Field cannot be blank");
+            if (TextUtils.isEmpty(providerServiceType.getText().toString())){
+                providerServiceType.setError("Field cannot be blank");
                 return;
             }
             if (TextUtils.isEmpty(providerServiceDescription.getText().toString())){
@@ -371,6 +374,10 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
             }
             if (providerServiceDescription.length()>15){
                 providerServiceDescription.setError("input field max 15 characters");
+                return;
+            }
+            if (TextUtils.isEmpty(provider_date_of_birth.getText().toString())){
+                provider_date_of_birth.setError("Field cannot be blank");
                 return;
             }
             sharedPreference.writeProviderName(provider_signup_name.getText().toString());
@@ -423,6 +430,17 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
         if (v.getId()==R.id.upload_image_provider){
             dialog.show();
         }
+        if (v.getId()==R.id.provider_verification_btn){
+
+            loadingbar.setTitle("Phone verification");
+            loadingbar.setMessage("please wait,while we are authenticating with your phone");
+            loadingbar.setCanceledOnTouchOutside(false);
+            loadingbar.show();
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, provider_signup_virification.getText().toString());
+            signInWithPhoneAuthCredential(credential);
+        }
+
+
 
         callbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -492,7 +510,7 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                             payment.putExtra("address",mSearchText.getText().toString());
                             payment.putExtra("service_type",providerServiceType.getText().toString());
                             payment.putExtra("service_descp",providerServiceDescription.getText().toString());
-
+                            payment.putExtra("refId",agentRefId.getText().toString());
                             startActivity(payment);
                             finish();
 
@@ -612,10 +630,9 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item.getItemId()==android.R.id.home){
-            Intent back=new Intent(ProviderSignUpActivity.this,MainActivity.class);
-            startActivity(back);
+            Intent agentSignUp=new Intent(ProviderSignUpActivity.this,MainActivity.class);
+            startActivity(agentSignUp);
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -624,8 +641,9 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent back=new Intent(ProviderSignUpActivity.this,MainActivity.class);
-        startActivity(back);
+        Intent agentSignUp=new Intent(ProviderSignUpActivity.this,MainActivity.class);
+        startActivity(agentSignUp);
         finish();
     }
+
 }

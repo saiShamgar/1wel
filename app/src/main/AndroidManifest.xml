@@ -13,7 +13,7 @@
         android:name=".Api.AppController"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/one_wel_loge"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:roundIcon="@drawable/one_wel_loge"
@@ -22,29 +22,38 @@
         <activity
             android:name=".UI.SplashScreenActivity"
             android:theme="@style/AppTheme1">
+
+        </activity>
+        <activity
+            android:name=".UI.MainActivity"
+            android:theme="@style/AppTheme1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UI.MainActivity"
-            android:theme="@style/AppTheme1" />
-        <activity android:name=".UI.Agent.AgentLoginActivity" />
-        <activity android:name=".UI.Agent.AgentSignUpActivity" />
+        <activity android:name=".UI.Agent.AgentLoginActivity"
+            android:parentActivityName=".UI.MainActivity"/>
+        <activity android:name=".UI.Agent.AgentSignUpActivity"
+            android:parentActivityName=".UI.Agent.AgentLoginActivity"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/places_key" />
 
-        <activity android:name=".UI.providers.ProviderSignUpActivity" />
+        <activity android:name=".UI.providers.ProviderSignUpActivity"
+            android:parentActivityName=".UI.MainActivity"/>
         <activity
             android:name=".UI.Agent.AgentProfileSettings"
             android:parentActivityName=".UI.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".UI.BlockSearchItemActivity"></activity>
-        <activity android:name=".UI.PaymentActivity"></activity>
+        <activity android:name=".UI.BlockSearchItemActivity"
+            android:parentActivityName=".UI.MainActivity">
+        </activity>
+        <activity android:name=".UI.PaymentActivity"
+            android:parentActivityName=".UI.MainActivity">
+        </activity>
 
         <meta-data
             android:name="com.razorpay.ApiKey"

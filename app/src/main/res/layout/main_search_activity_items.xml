@@ -30,7 +30,7 @@
             android:layout_height="100dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="35dp"
-            android:src="@drawable/batman"
+            android:src="@drawable/one_wel_loge"
             android:scaleType="fitXY"
             android:layout_alignParentEnd="true" />
 

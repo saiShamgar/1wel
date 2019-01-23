@@ -1,6 +1,7 @@
 package com.example.sss.wel.Api;
 
 import com.example.sss.wel.Models.AgentData;
+import com.example.sss.wel.Models.ProvidersDataModel;
 import com.example.sss.wel.Models.SearchItems;
 import com.example.sss.wel.Models.Services;
 import com.example.sss.wel.Models.Status;
@@ -105,7 +106,43 @@ public interface ApiService {
     @GET("users_list/users/logout/")
     Call<Status> agentLogout();
 
-    //http://www.yesinteriors.online/1wel/users_list/users/login
+    @Headers("X-API-KEY:" + "SHANKAR@111")
+    @GET("users_list/users/providers/")
+    Call<ProvidersDataModel> providersDataModel(
+            @Query("token") String token);
+
+    @Headers("X-API-KEY:" + "SHANKAR@111")
+    @GET("users_list/users/chekprovider/")
+    Call<Status> checkProvider(
+            @Query("user_id") String user_id,
+            @Query("phone") String phone);
+
+    @Headers("X-API-KEY:" + "SHANKAR@111")
+    @GET("users_list/users/provider_delete/")
+    Call<Status> deleteprovider(
+            @Query("user_id") String user_id,
+            @Query("phone") String phone);
+
+
+    //http://www.yesinteriors.online/1wel/users_list/users/provider_delete?user_id=106&phone=9642542514
+
+//    {
+//        "status": true,
+//            "message": "Delete Successfully"
+//    }
+
+    //http://www.yesinteriors.online/1wel/users_list/users/chekprovider?user_id=106&phone=9642542514
+//
+//        {
+//                "username": "eswar",
+//                "phone": "1234567890",
+//                "profile_pic": "http://www.yesinteriors.online/1wel/uploads/users/e7LwvMfK.jpg",
+//                "website_url": "http://www.yesinteriors.online/1wel/users_list/users/provider",
+//                "address": "Mvpcolony",
+//                "service_desc": "fgsdfdssdfgdsfd",
+//                "service": "plumber"
+//        }
+
 }
 
 

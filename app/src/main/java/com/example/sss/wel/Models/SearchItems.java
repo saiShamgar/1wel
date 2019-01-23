@@ -6,6 +6,8 @@ public class SearchItems {
 
     @SerializedName("username")
     String name;
+    @SerializedName("user_id")
+    String user_id;
     @SerializedName("phone")
     String phone;
     @SerializedName("service")
@@ -19,8 +21,9 @@ public class SearchItems {
     @SerializedName("profile_pic")
     String image;
 
-    public SearchItems(String name, String phone, String service, String address, String webSiteUrl, String service_des, String image) {
+    public SearchItems(String name, String user_id, String phone, String service, String address, String webSiteUrl, String service_des, String image) {
         this.name = name;
+        this.user_id = user_id;
         this.phone = phone;
         this.service = service;
         this.address = address;
@@ -83,5 +86,13 @@ public class SearchItems {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

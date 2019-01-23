@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
     private SharedPreferences pref1;
     private String regnumber;
     private SharedPreferenceConfig sharedPreferenceConfig;
-    private String loc,latitude,longitude,image,address,service_type,service_desp,pan_num;
+    private String loc,latitude,longitude,image,address,service_type,service_desp,refId;
     private ApiService apiService;
     private ProgressDialog progressDialog;
 
@@ -42,6 +43,10 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("SignUp Payment");
+
         paymentButton=(Button)findViewById(R.id.paymentButton);
         txt_ord_id=(TextView) findViewById(R.id.orderid);
         txt_tot_cst=(TextView)findViewById(R.id.totalcost);
@@ -57,7 +62,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
         address=getIntent().getExtras().getString("address");
         service_type=getIntent().getExtras().getString("service_type");
         service_desp=getIntent().getExtras().getString("service_descp");
-        pan_num=getIntent().getExtras().getString("pan_num");
+        refId=getIntent().getExtras().getString("refId");
 
         sharedPreferenceConfig=new SharedPreferenceConfig(this);
         txt_ord_id.setText("XXXXXXXXXX104");
@@ -139,7 +144,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
                                     sharedPreferenceConfig.readProviderGender(),
                                     sharedPreferenceConfig.readProviderPic(),
                                     address,
-                                    "1WTOul0IBzwSF4EL",
+                                    refId,
                                     sharedPreferenceConfig.readProviderDob(),
                                     sharedPreferenceConfig.readProviderWebsite(),
                                     service_type,
@@ -150,7 +155,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
                                 public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
                                     progressDialog.dismiss();
                                     if (response.body()==null) {
-                                        Toast.makeText(getApplicationContext(), "some error was occured/please register again", Toast.LENGTH_LONG).show();
+                                       Toast.makeText(getApplicationContext(), "some error was occured/please register again", Toast.LENGTH_LONG).show();
                                     }
                                     Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                                     Intent agentLogin = new Intent(PaymentActivity.this, MainActivity.class);
@@ -160,7 +165,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
                                 @Override
                                 public void onFailure(Call<Status> call, Throwable t) {
                                     progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(),"registrationNotSuccessfull",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(),"registration Not Successful",Toast.LENGTH_LONG).show();
                                 }
                             });
 
@@ -175,7 +180,6 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
                 Log.e("bank name",sharedPreferenceConfig.readAgentBankName());
                 Log.e("bank num",sharedPreferenceConfig.readAgentBankNumber());
                 Log.e("bank ifsc",sharedPreferenceConfig.readAgentBankIfsc());
-                Log.e("pan num",pan_num);
                 Log.e("gender",sharedPreferenceConfig.readAgentGender());
                 Log.e("addres",address);
                 Log.e("dob",sharedPreferenceConfig.readAgentDob());
@@ -191,7 +195,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
                         sharedPreferenceConfig.readAgentBankName(),
                         sharedPreferenceConfig.readAgentBankNumber(),
                         sharedPreferenceConfig.readAgentBankIfsc(),
-                        pan_num,
+                        "null",
                         sharedPreferenceConfig.readAgentGender(),
                         sharedPreferenceConfig.readAgentPic(),
                         address,
@@ -239,16 +243,28 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
         }
     }
 
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-    }
-
     public static String orderedid()
     {
         int randomPin   =(int)(Math.random()*9000)+1000;
         String otp  = String.valueOf(randomPin);
         return otp;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home){
+            Intent agentSignUp=new Intent(PaymentActivity.this,MainActivity.class);
+            startActivity(agentSignUp);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent agentSignUp=new Intent(PaymentActivity.this,MainActivity.class);
+        startActivity(agentSignUp);
+        finish();
     }
 }

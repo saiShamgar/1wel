@@ -1,13 +1,16 @@
 package com.example.sss.wel.UI;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sss.wel.Adapters.MainActivityRecyclerAdapter;
 import com.example.sss.wel.Adapters.PlaceAutocompleteAdapter;
 import com.example.sss.wel.Api.APIUrl;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final int LOCATION_PERMISSION_REQUESTED_CODE = 1234;
     private GoogleApiClient googleApiClient;
     private Boolean mlocation_permission_granted = false;
+    boolean doubleBackToExitPressedOnce = false;
 
     //widgets
     private AutoCompleteTextView mSearchText,edt_search_items;
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private SharedPreferenceConfig sharedPreferenceConfig;
 
     private String latitude,longitude;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -101,21 +107,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         edt_search_items=findViewById(R.id.edt_search_items);
         searchGo=findViewById(R.id.searchGo);
 
+        progressDialog=new ProgressDialog(this);
+        progressDialog.setTitle("Getting Search Items");
+        progressDialog.setMessage("Please wait...,");
+        progressDialog.setCanceledOnTouchOutside(false);
+
         boolean defaultValue1 = false;
-        boolean provider = getIntent().getBooleanExtra("provider registered", defaultValue1);
+        final boolean provider = getIntent().getBooleanExtra("provider registered", defaultValue1);
 
          if (sharedPreferenceConfig.readAgentLoggedin().contains("agent registered")){
              one_wel_agent.setVisibility(View.GONE);
              SharedPreferences preferences=getApplicationContext().getSharedPreferences("userLog",MODE_PRIVATE);
-             String image=preferences.getString("image",null);
+             final String image=preferences.getString("image",null);
              final String name=preferences.getString("name",null);
-             Glide.with(this).load(image).placeholder(R.drawable.one_wel_loge).into(one_wel_logo);
+             final String token=preferences.getString("token",null);
+
+             Glide.with(this)
+                     .load(image)
+                     .placeholder(R.drawable.ic_person_black_24dp)
+                     // read original from cache (if present) otherwise download it and decode it
+                     .into(one_wel_logo);
+
              one_wel_logo.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
                      Intent profileSettings=new Intent(MainActivity.this, AgentProfileSettings.class);
                      profileSettings.putExtra("name",name);
+                     profileSettings.putExtra("token",token);
+                     profileSettings.putExtra("image",image);
                      startActivity(profileSettings);
+                     finish();
+
                  }
              });
          }
@@ -129,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 Intent agentActivity=new Intent(MainActivity.this, AgentLoginActivity.class);
                 startActivity(agentActivity);
                 finish();
+
             }
         });
         one_wel_provider.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         searchGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
                 apiService=APIUrl.getApiClient().create(ApiService.class);
                 Call<List<SearchItems>> call=apiService.search(latitude,longitude,edt_search_items.getText().toString());
 
@@ -182,9 +206,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         searchItems=response.body();
 
                         if (response.body()==null){
+                            progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(),"no Providers Found",Toast.LENGTH_LONG).show();
                             return;
                         }
+                        progressDialog.dismiss();
                        // Toast.makeText(getApplicationContext(),"items"+services_types,Toast.LENGTH_LONG).show();
                         adapter=new MainActivityRecyclerAdapter(getApplicationContext(),searchItems);
                         recycler_view.setHasFixedSize(true);
@@ -196,7 +222,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
                     @Override
                     public void onFailure(Call<List<SearchItems>> call, Throwable t) {
-
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(),"some error occured",Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -309,5 +336,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
 
 }

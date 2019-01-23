@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +48,9 @@ public class AgentLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_login);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Agent Login");
 
         txt_agent_signUp=findViewById(R.id.txt_agent_signUp);
         agent_login_name=findViewById(R.id.agent_login_name);
@@ -72,7 +76,6 @@ public class AgentLoginActivity extends AppCompatActivity {
         agent_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (TextUtils.isEmpty(agent_login_name.getText().toString())){
                      agent_login_name.setError("Field cannot be blank");
                       return;
@@ -107,6 +110,7 @@ public class AgentLoginActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor=preferences.edit();
                             editor.putString("name",userData.get(0).getUsername());
                             editor.putString("image",userData.get(0).getProfile_pic());
+                            editor.putString("token",userData.get(0).getToken());
                             editor.commit();
                             startActivity(agentLogin);
                             finish();
@@ -175,18 +179,23 @@ public class AgentLoginActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-
-
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home){
+            Intent agentSignUp=new Intent(AgentLoginActivity.this,MainActivity.class);
+            startActivity(agentSignUp);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent back=new Intent(AgentLoginActivity.this, MainActivity.class);
-        startActivity(back);
+        Intent agentSignUp=new Intent(AgentLoginActivity.this,MainActivity.class);
+        startActivity(agentSignUp);
         finish();
     }
 }

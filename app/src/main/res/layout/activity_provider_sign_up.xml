@@ -16,7 +16,8 @@
             android:id="@+id/flprovider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="30dp">
+            android:paddingTop="30dp"
+            android:focusableInTouchMode="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -24,7 +25,8 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
-                android:background="@drawable/white_round_background">
+                android:background="@drawable/white_round_background"
+                android:focusableInTouchMode="true">
 
                 //personal details
 
@@ -68,6 +70,7 @@
                     android:id="@+id/provider_signup_Location"
                     android:layout_height="50dp"
                     android:inputType="text|textMultiLine"
+                    android:imeOptions="actionNext"
                     android:layout_width="match_parent"
                     android:maxLines="2"
                     android:layout_marginRight="10dp"
@@ -131,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingTop="5dp"
-                    android:hint="Agent Reference Id"
+                    android:hint="Reference Id(optional)"
                     android:textSize="15sp"
                     android:gravity="center_vertical"
                     android:layout_below="@+id/provider_service_descp"
@@ -231,7 +234,7 @@
                     android:layout_below="@+id/radioGroupProvider"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/batman"
+                    android:src="@drawable/ic_person_black_24dp"
                     android:scaleType="fitXY"
                     android:layout_margin="5dp"
                     android:visibility="gone"/>
@@ -313,7 +316,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/batman"/>
+                android:src="@drawable/one_wel"/>
         </FrameLayout>
 
 

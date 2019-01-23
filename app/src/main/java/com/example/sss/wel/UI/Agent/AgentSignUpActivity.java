@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,32 +33,16 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.sss.wel.Adapters.PlaceAutocompleteAdapter;
 import com.example.sss.wel.Api.APIUrl;
 import com.example.sss.wel.Api.ApiService;
-import com.example.sss.wel.Api.AppController;
-import com.example.sss.wel.Api.VolleyMultipartRequest;
-import com.example.sss.wel.Models.AgentRegistration;
-import com.example.sss.wel.Models.Services;
-import com.example.sss.wel.Models.Status;
-import com.example.sss.wel.Models.Test;
 import com.example.sss.wel.R;
 import com.example.sss.wel.UI.MainActivity;
 import com.example.sss.wel.UI.PaymentActivity;
-import com.example.sss.wel.UI.providers.ProviderSignUpActivity;
 import com.example.sss.wel.Utils.SharedPreferenceConfig;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -69,38 +54,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.android.volley.Response;
-
-import org.apache.commons.io.FileUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.http.Field;
-
-import static com.example.sss.wel.Api.APIUrl.retrofit;
 
 
 public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener{
@@ -118,9 +84,8 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     private AutoCompleteTextView mSearchText;
 
     //registration Widgets
-    private EditText agent_signup_name,agent_signup_phone,agent_signup_pass,agent_signup_confirm_pass
-            ,agent_signup_AadharNum,agent_signup_Bank_name,agent_signup_Bank_Account_num,agent_signup_Bank_Ifsc_Code,
-            agent_signup_Pan_number,agent_signup_virification,agent_signup_date_of_birth;
+    private EditText agent_signup_name,agent_signup_phone,agent_signup_pass,agent_signup_confirm_pass,
+    agent_signup_ReEnterBank_Account_num,agent_signup_AadharNum,agent_signup_Bank_name,agent_signup_Bank_Account_num,agent_signup_Bank_Ifsc_Code,agent_signup_virification,agent_signup_date_of_birth;
     private Button agent_submit_personal_details,agent_submit_bank_details,upload_image_agent,agent_reg_submit_btn,agent_verification_btn;
     private RadioButton radio_btn_male,radio_btn_female;
     private ImageView agent_image;
@@ -159,8 +124,16 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_sign_up);
-        getLocationPermission();
+
+        if (!mlocation_permission_granted){
+            getLocationPermission();
+        }
+
         fn_permission();
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Agent Sign Up");
 
         mAuth=FirebaseAuth.getInstance();
         sharedPreference=new SharedPreferenceConfig(this);
@@ -191,9 +164,9 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         agent_signup_Bank_name=findViewById(R.id.agent_signup_Bank_name);
         agent_signup_Bank_Account_num=findViewById(R.id.agent_signup_Bank_Account_num);
         agent_signup_Bank_Ifsc_Code=findViewById(R.id.agent_signup_Bank_Ifsc_Code);
-        agent_signup_Pan_number=findViewById(R.id.agent_signup_Pan_number);
         agent_signup_virification=findViewById(R.id.agent_signup_virification);
         agent_signup_date_of_birth=findViewById(R.id.agent_signup_date_of_birth);
+        agent_signup_ReEnterBank_Account_num=findViewById(R.id.agent_signup_ReEnterBank_Account_num);
 
 
         //initialize button widgets
@@ -273,14 +246,13 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG,"on request permisions calling");
-        mlocation_permission_granted=false;
         switch (requestCode) {
             case LOCATION_PERMISSION_REQUESTED_CODE: {
                 if(grantResults.length>0) {
                     for(int i=0;i<grantResults.length;i++) {
                         if((grantResults[i] != PackageManager.PERMISSION_GRANTED)) {
                             Log.d(TAG,"not get request permissions");
-                            mlocation_permission_granted=false;
+                           getLocationPermission();
                         }
                     }
                     Log.d(TAG,"permissions granted");
@@ -333,39 +305,33 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
 
         if (v.getId()==R.id.agent_submit_personal_details){
 
-//            if (TextUtils.isEmpty(agent_signup_name.getText().toString())) {
-//                agent_signup_name.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (TextUtils.isEmpty(agent_signup_phone.getText().toString())){
-//                agent_signup_phone.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (!(agent_signup_phone.getText().toString().length()==10)){
-//                agent_signup_phone.setError("please enter valid number");
-//                return;
-//            }
-//            if (TextUtils.isEmpty(mSearchText.getText().toString())){
-//                mSearchText.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (TextUtils.isEmpty(agent_signup_pass.getText().toString())) {
-//                agent_signup_pass.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (TextUtils.isEmpty(agent_signup_confirm_pass.getText().toString())) {
-//                agent_signup_confirm_pass.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (!(agent_signup_pass.getText().toString().equals(agent_signup_confirm_pass.getText().toString()))){
-//                agent_signup_confirm_pass.setError("re enter the same password");
-//            }
-//            if (TextUtils.isEmpty(agent_signup_date_of_birth.getText().toString())){
-//                agent_signup_date_of_birth.setError("field is mandatory");
-//            }
-            if ((validateDateFormat(agent_signup_date_of_birth.getText().toString()))==null){
-                sharedPreference.writeAgentDob(agent_signup_date_of_birth.getText().toString());
-
+            if (TextUtils.isEmpty(agent_signup_name.getText().toString())) {
+                agent_signup_name.setError("Field cannot be blank");
+                return;
+            }
+            if (TextUtils.isEmpty(agent_signup_phone.getText().toString())){
+                agent_signup_phone.setError("Field cannot be blank");
+                return;
+            }
+            if (!(agent_signup_phone.getText().toString().length()==10)){
+                agent_signup_phone.setError("please enter valid number");
+                return;
+            }
+            if (TextUtils.isEmpty(mSearchText.getText().toString())){
+                mSearchText.setError("Field cannot be blank");
+                return;
+            }
+            if (TextUtils.isEmpty(agent_signup_pass.getText().toString())) {
+                agent_signup_pass.setError("Field cannot be blank");
+                return;
+            }
+            if (TextUtils.isEmpty(agent_signup_confirm_pass.getText().toString())) {
+                agent_signup_confirm_pass.setError("Field cannot be blank");
+                return;
+            }
+            if (!(agent_signup_pass.getText().toString().equals(agent_signup_confirm_pass.getText().toString()))){
+                agent_signup_confirm_pass.setError("re enter the same password");
+                return;
             }
 
             //Storing values
@@ -386,44 +352,49 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             agent_signup_Bank_name.setVisibility(View.VISIBLE);
             agent_signup_Bank_Account_num.setVisibility(View.VISIBLE);
             agent_signup_Bank_Ifsc_Code.setVisibility(View.VISIBLE);
-            agent_signup_Pan_number.setVisibility(View.VISIBLE);
             agent_submit_bank_details.setVisibility(View.VISIBLE);
+            agent_signup_ReEnterBank_Account_num.setVisibility(View.VISIBLE);
 
             }
         if (v.getId()==R.id.agent_submit_bank_details){
 
-//            if (TextUtils.isEmpty(agent_signup_AadharNum.getText().toString())){
-//                agent_signup_AadharNum.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (TextUtils.isEmpty(agent_signup_Bank_name.getText().toString())) {
-//                agent_signup_Bank_name.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (TextUtils.isEmpty(agent_signup_Bank_Account_num.getText().toString())) {
-//                agent_signup_Bank_Account_num.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (TextUtils.isEmpty(agent_signup_Bank_Ifsc_Code.getText().toString())) {
-//                agent_signup_Bank_Ifsc_Code.setError("Field cannot be blank");
-//                return;
-//            }
-//            if (TextUtils.isEmpty(agent_signup_Pan_number.getText().toString())) {
-//                agent_signup_Pan_number.setError("Field cannot be blank");
-//                return;
-//            }
+            if (TextUtils.isEmpty(agent_signup_AadharNum.getText().toString())){
+                agent_signup_AadharNum.setError("Field cannot be blank");
+                return;
+            }
+            if (TextUtils.isEmpty(agent_signup_Bank_name.getText().toString())) {
+                agent_signup_Bank_name.setError("Field cannot be blank");
+                return;
+            }
+            if (TextUtils.isEmpty(agent_signup_Bank_Account_num.getText().toString())) {
+                agent_signup_Bank_Account_num.setError("Field cannot be blank");
+                return;
+            }
+            if (TextUtils.isEmpty(agent_signup_Bank_Ifsc_Code.getText().toString())) {
+                agent_signup_Bank_Ifsc_Code.setError("Field cannot be blank");
+                return;
+            }
+            if (TextUtils.isEmpty(agent_signup_ReEnterBank_Account_num.getText().toString())) {
+                agent_signup_ReEnterBank_Account_num.setError("Field cannot be blank");
+                return;
+            }
+            if (!(agent_signup_Bank_Account_num.getText().toString().equals(agent_signup_ReEnterBank_Account_num.getText().toString()))){
+                agent_signup_ReEnterBank_Account_num.setError("re enter the same Bank account number");
+                return;
+            }
+
 
             sharedPreference.writeAgentAadhar(agent_signup_AadharNum.getText().toString());
             sharedPreference.writeAgentBankName(agent_signup_Bank_name.getText().toString());
-            sharedPreference.writeAgentBankNumber(agent_signup_Bank_Account_num.getText().toString());
+            sharedPreference.writeAgentBankNumber(agent_signup_ReEnterBank_Account_num.getText().toString());
             sharedPreference.writeAgentBankIfsc(agent_signup_Bank_Ifsc_Code.getText().toString());
-            sharedPreference.writeAgentPanNumber(agent_signup_Pan_number.getText().toString());
+
 
             agent_signup_AadharNum.setVisibility(View.GONE);
             agent_signup_Bank_name.setVisibility(View.GONE);
             agent_signup_Bank_Account_num.setVisibility(View.GONE);
             agent_signup_Bank_Ifsc_Code.setVisibility(View.GONE);
-            agent_signup_Pan_number.setVisibility(View.GONE);
+            agent_signup_ReEnterBank_Account_num.setVisibility(View.GONE);
             agent_submit_bank_details.setVisibility(View.GONE);
 
             radioGroup.setVisibility(View.VISIBLE);
@@ -534,7 +505,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                             payment.putExtra("user_type","agent");
                             payment.putExtra("latitude",latitude);
                             payment.putExtra("longitude",longitude);
-                            payment.putExtra("pan_num",agent_signup_Pan_number.getText().toString());
                             payment.putExtra("address",mSearchText.getText().toString());
                             startActivity(payment);
                             finish();
@@ -584,13 +554,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             }
         }
     }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent back=new Intent(AgentSignUpActivity.this, MainActivity.class);
-        startActivity(back);
-        finish();
-    }
 
     //upload images
     public String  imageToString(Bitmap bitmap)
@@ -620,86 +583,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         return parsedDate;
     }
 
-//    private void sendPostRequestWithHeaders() {
-////        // Change the url of the post request as per your need...This url is just for demo purposes and
-////        // actually it does not post data...i.e. it will return same response irrespective of the value you
-////        // as parameters.
-////
-////        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, APIUrl.BASE_URL1+"users_list/users/user/",
-////                new Response.Listener<NetworkResponse>() {
-////                    @Override
-////                    public void onResponse(NetworkResponse response) {
-////                        try {
-////                            loadingbar.dismiss();
-////                            JSONObject obj = new JSONObject(new String(response.data));
-////                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-////                            Intent agentLogin=new Intent(AgentSignUpActivity.this, MainActivity.class);
-////                            startActivity(agentLogin);
-////                            finish();
-////                            sharedPreference.writeAgentLoggedIn("agent registered");
-////                        } catch (JSONException e) {
-////                            e.printStackTrace();
-////                        }
-////                    }
-////                },
-////                new Response.ErrorListener() {
-////                    @Override
-////                    public void onErrorResponse(VolleyError error) {
-////                        loadingbar.dismiss();
-////                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-////                    }
-////                })
-////        {
-////            /*
-////             * If you want to add more parameters with the image
-////             * you can do it here
-////             * here we have only one parameter with the image
-////             * which is tags
-////             * */
-////            @Override
-////            protected Map<String, String> getParams() {
-////                Map<String, String> params = new HashMap<>();
-////                params.put("username",sharedPreference.readAgentEmail());
-////                params.put("phone",sharedPreference.readAgentPhone());
-////                params.put("latitude",latitude);
-////                params.put("longitude",longitude);
-////                params.put("pass",sharedPreference.readAgentPassword());
-////                params.put("aadhar_no",sharedPreference.readAgentAadhar());
-////                params.put("bank_name",sharedPreference.readAgentBankName());
-////                params.put("bank_ac_no",sharedPreference.readAgentBankNumber());
-////                params.put("bank_ifsc_code",sharedPreference.readAgentBankIfsc());
-////                params.put("pancard_no",agent_signup_Pan_number.getText().toString());
-////                params.put("gender",sharedPreference.readAgentGender());
-////                params.put("address",mSearchText.getText().toString());
-////                params.put("dob",sharedPreference.readAgentDob());
-////                return params;
-////            }
-////
-////            @Override
-////            public Map<String, String> getHeaders() throws AuthFailureError {
-////                Map<String, String> params = new HashMap<>();
-////                params.put("X-API-KEY:","SHANKAR@111");
-////                return params ;
-////            }
-////
-////            /*
-////             * Here we are passing image by renaming it with a unique name
-////             * */
-////
-////            @Override
-////            protected Map<String, DataPart> getByteData() {
-////                Map<String, DataPart> params = new HashMap<>();
-////                long imagename = System.currentTimeMillis();
-////                params.put("profile_pic", new DataPart(imagename + ".png", getFileDataFromDrawable(bmp)));
-////                return params;
-////            }
-////        };
-////
-////        //adding the request to volley
-////        Volley.newRequestQueue(this)
-////                .add(volleyMultipartRequest);
-//
-//    }
     private void fn_permission() {
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)||
                 (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)||
@@ -723,5 +606,24 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         } else {
             boolean_permission = true;
         }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home){
+            Intent agentSignUp=new Intent(AgentSignUpActivity.this,AgentLoginActivity.class);
+            startActivity(agentSignUp);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent agentSignUp=new Intent(AgentSignUpActivity.this,AgentLoginActivity.class);
+        startActivity(agentSignUp);
+        finish();
     }
 }
