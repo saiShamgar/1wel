@@ -81,7 +81,6 @@
                 android:paddingEnd="15sp"
                 android:paddingStart="15sp"/>
                 </RelativeLayout>
-
             </android.support.v7.widget.Toolbar>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
