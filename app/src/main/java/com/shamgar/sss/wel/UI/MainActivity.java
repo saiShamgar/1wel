@@ -164,8 +164,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        getLocationPermission();
-
         //Initializing google api client
         googleApiClient=new GoogleApiClient
                 .Builder(this)
@@ -259,46 +257,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
 
-    private void getLocationPermission() {
-        Log.d(TAG,"getting location permission: called");
-        String [] permissions={
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(), COURSE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG,"permissions granted");
-                mlocation_permission_granted=true;
-            }
-            else {
-                Log.d(TAG,"permissions not granted");
-                ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUESTED_CODE);
-            }
-        }
-        else {
-            Log.d(TAG,"permissions not granted");
-            ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUESTED_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG,"on request permisions calling");
-        mlocation_permission_granted=false;
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUESTED_CODE: {
-                if(grantResults.length>0) {
-                    for(int i=0;i<grantResults.length;i++) {
-                        if((grantResults[i] != PackageManager.PERMISSION_GRANTED)) {
-                            Log.d(TAG,"not get request permissions");
-                            mlocation_permission_granted=false;
-                        }
-                    }
-                    Log.d(TAG,"permissions granted");
-                    mlocation_permission_granted=true;
-                }
-            }
-        }
-    }
+//
     private AdapterView.OnItemClickListener mAutoCompleteListener=new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

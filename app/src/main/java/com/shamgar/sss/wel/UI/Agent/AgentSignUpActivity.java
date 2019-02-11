@@ -86,7 +86,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
 
     //registration Widgets
     private EditText agent_signup_name,agent_signup_phone,agent_signup_pass,agent_signup_confirm_pass,
-    agent_signup_ReEnterBank_Account_num,agent_signup_AadharNum,agent_signup_Bank_name,agent_signup_Bank_Account_num,agent_signup_Bank_Ifsc_Code,agent_signup_virification,agent_signup_date_of_birth;
+            agent_signup_ReEnterBank_Account_num,agent_signup_AadharNum,agent_signup_Bank_name,agent_signup_Bank_Account_num,agent_signup_Bank_Ifsc_Code,agent_signup_virification,agent_signup_date_of_birth;
     private Button agent_submit_personal_details,agent_submit_bank_details,upload_image_agent,agent_reg_submit_btn,agent_verification_btn;
     private RadioButton radio_btn_male,radio_btn_female;
     private ImageView agent_image;
@@ -120,17 +120,13 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     public static final String REQUEST_TAG = "JSON_OBJECT_REQUEST_TAG";
     public static final String POST_REQUEST_TAG = "JSON_OBJECT_POST_REQUEST_TAG";
 
+    private boolean isBoolean_permission=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_sign_up);
-
-        if (!mlocation_permission_granted){
-            getLocationPermission();
-        }
-
-        fn_permission();
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -222,46 +218,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         dialog=builder.create();
     }
 
-    //getting location permissions
-    private void getLocationPermission() {
-        Log.d(TAG,"getting location permission: called");
-        String [] permissions={
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(), COURSE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG,"permissions granted");
-                mlocation_permission_granted=true;
-            }
-            else {
-                Log.d(TAG,"permissions not granted");
-                ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUESTED_CODE);
-            }
-        }
-        else {
-            Log.d(TAG,"permissions not granted");
-            ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUESTED_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG,"on request permisions calling");
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUESTED_CODE: {
-                if(grantResults.length>0) {
-                    for(int i=0;i<grantResults.length;i++) {
-                        if((grantResults[i] != PackageManager.PERMISSION_GRANTED)) {
-                            Log.d(TAG,"not get request permissions");
-                           getLocationPermission();
-                        }
-                    }
-                    Log.d(TAG,"permissions granted");
-                    mlocation_permission_granted=true;
-                }
-            }
-        }
-    }
 
     //setting location places to editText
     private AdapterView.OnItemClickListener mAutoCompleteListener=new AdapterView.OnItemClickListener() {
@@ -284,13 +240,13 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                 //you can use lat with qLoc.latitude;
                 //and long with qLoc.longitude;
 
-            places.release();
+                places.release();
                 return;
             }
             final Place mPlace = places.get(0);
             LatLng qLoc = mPlace.getLatLng();
-             latitude= String.valueOf(qLoc.latitude);
-             longitude= String.valueOf(qLoc.longitude);
+            latitude= String.valueOf(qLoc.latitude);
+            longitude= String.valueOf(qLoc.longitude);
             Toast.makeText(getApplicationContext(),"location "+qLoc,Toast.LENGTH_LONG).show();
             places.release();
         }
@@ -356,7 +312,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             agent_submit_bank_details.setVisibility(View.VISIBLE);
             agent_signup_ReEnterBank_Account_num.setVisibility(View.VISIBLE);
 
-            }
+        }
         if (v.getId()==R.id.agent_submit_bank_details){
 
             if (TextUtils.isEmpty(agent_signup_AadharNum.getText().toString())){
@@ -414,21 +370,63 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             if (radio_btn_female.isChecked())
                 sharedPreference.writeAgentGender("female");
 
-             loadingbar=new ProgressDialog(this);
-             //sending verification code
+            loadingbar=new ProgressDialog(this);
+            //sending verification code
 
-                String phoneNumber=agent_signup_phone.getText().toString();
-                loadingbar.setTitle("Phone verification");
-                loadingbar.setMessage("please wait,while we are authenticating with your phone");
-                loadingbar.setCanceledOnTouchOutside(false);
-                loadingbar.show();
+            String phoneNumber=agent_signup_phone.getText().toString();
+            loadingbar.setTitle("Phone verification");
+            loadingbar.setMessage("please wait,while we are authenticating with your phone");
+            loadingbar.setCanceledOnTouchOutside(false);
+            loadingbar.show();
 
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
                     "+91" + phoneNumber,
                     60,
                     TimeUnit.SECONDS,
                     this,
-                   callbacks);       // OnVerificationStateChangedCallbacks
+                    new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                        @Override
+                        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                            signInWithPhoneAuthCredential(phoneAuthCredential);
+                        }
+
+                        @Override
+                        public void onVerificationFailed(FirebaseException e) {
+                            loadingbar.dismiss();
+                            Toast.makeText(getApplicationContext(),"Invalid phone number, please enter valid number",Toast.LENGTH_LONG).show();
+
+                            radioGroup.setVisibility(View.VISIBLE);
+                            agent_image.setVisibility(View.VISIBLE);
+                            upload_image_agent.setVisibility(View.VISIBLE);
+                            agent_reg_submit_btn.setVisibility(View.VISIBLE);
+                            agent_reg_submit_btn.setText("Re-submit");
+
+                            txt_otp_hint.setVisibility(View.GONE);
+                            agent_signup_virification.setVisibility(View.GONE);
+                            agent_verification_btn.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
+                           // super.onCodeSent(s, forceResendingToken);
+                            // The SMS verification code has been sent to the provided phone number, we
+                            // now need to ask the user to enter the code and then construct a credential
+                            // by combining the code with a verification ID.
+                            mVerificationId = verificationId;
+                            mResendToken = token;
+                            loadingbar.dismiss();
+                            Toast.makeText(getApplicationContext(),"code sent to the "+agent_signup_phone.getText(),Toast.LENGTH_LONG).show();
+
+                            radioGroup.setVisibility(View.GONE);
+                            agent_image.setVisibility(View.GONE);
+                            upload_image_agent.setVisibility(View.GONE);
+                            agent_reg_submit_btn.setVisibility(View.GONE);
+
+                            txt_otp_hint.setVisibility(View.VISIBLE);
+                            agent_signup_virification.setVisibility(View.VISIBLE);
+                            agent_verification_btn.setVisibility(View.VISIBLE);
+                        }
+                    });       // OnVerificationStateChangedCallbacks
 
         }
         if (v.getId()==R.id.upload_image_agent){
@@ -445,51 +443,53 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         }
 
 
-        callbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            @Override
-            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                signInWithPhoneAuthCredential(phoneAuthCredential);
-            }
-
-            @Override
-            public void onVerificationFailed(FirebaseException e)
-            {
-                loadingbar.dismiss();
-                Toast.makeText(getApplicationContext(),"Invalid phone number, please enter valid number",Toast.LENGTH_LONG).show();
-
-                radioGroup.setVisibility(View.VISIBLE);
-                agent_image.setVisibility(View.VISIBLE);
-                upload_image_agent.setVisibility(View.VISIBLE);
-                agent_reg_submit_btn.setVisibility(View.VISIBLE);
-                agent_reg_submit_btn.setText("Re-submit");
-
-                txt_otp_hint.setVisibility(View.GONE);
-                agent_signup_virification.setVisibility(View.GONE);
-                agent_verification_btn.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onCodeSent(String verificationId,
-                                   PhoneAuthProvider.ForceResendingToken token) {
-                // The SMS verification code has been sent to the provided phone number, we
-                // now need to ask the user to enter the code and then construct a credential
-                // by combining the code with a verification ID.
-                mVerificationId = verificationId;
-                mResendToken = token;
-                loadingbar.dismiss();
-                Toast.makeText(getApplicationContext(),"code sent to the "+agent_signup_phone.getText(),Toast.LENGTH_LONG).show();
-
-                radioGroup.setVisibility(View.GONE);
-                agent_image.setVisibility(View.GONE);
-                upload_image_agent.setVisibility(View.GONE);
-                agent_reg_submit_btn.setVisibility(View.GONE);
-
-                txt_otp_hint.setVisibility(View.VISIBLE);
-                agent_signup_virification.setVisibility(View.VISIBLE);
-                agent_verification_btn.setVisibility(View.VISIBLE);
-            }
-        };
-
+//callbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+// 8jkl;i0op
+    //}
+//            @Override
+//            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+//                signInWithPhoneAuthCredential(phoneAuthCredential);
+//            }
+//
+//            @Override
+//            public void onVerificationFailed(FirebaseException e)
+//            {
+//                loadingbar.dismiss();
+//                Toast.makeText(getApplicationContext(),"Invalid phone number, please enter valid number",Toast.LENGTH_LONG).show();
+//
+//                radioGroup.setVisibility(View.VISIBLE);
+//                agent_image.setVisibility(View.VISIBLE);
+//                upload_image_agent.setVisibility(View.VISIBLE);
+//                agent_reg_submit_btn.setVisibility(View.VISIBLE);
+//                agent_reg_submit_btn.setText("Re-submit");
+//
+//                txt_otp_hint.setVisibility(View.GONE);
+//                agent_signup_virification.setVisibility(View.GONE);
+//                agent_verification_btn.setVisibility(View.GONE);
+//            }
+//
+//            @Override
+//            public void onCodeSent(String verificationId,
+//                                   PhoneAuthProvider.ForceResendingToken token) {
+//                // The SMS verification code has been sent to the provided phone number, we
+//                // now need to ask the user to enter the code and then construct a credential
+//                // by combining the code with a verification ID.
+//                mVerificationId = verificationId;
+//                mResendToken = token;
+//                loadingbar.dismiss();
+//                Toast.makeText(getApplicationContext(),"code sent to the "+agent_signup_phone.getText(),Toast.LENGTH_LONG).show();
+//
+//                radioGroup.setVisibility(View.GONE);
+//                agent_image.setVisibility(View.GONE);
+//                upload_image_agent.setVisibility(View.GONE);
+//                agent_reg_submit_btn.setVisibility(View.GONE);
+//
+//                txt_otp_hint.setVisibility(View.VISIBLE);
+//                agent_signup_virification.setVisibility(View.VISIBLE);
+//                agent_verification_btn.setVisibility(View.VISIBLE);
+//            }
+//        };
+//
 
     }
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -509,11 +509,11 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                             payment.putExtra("address",mSearchText.getText().toString());
                             startActivity(payment);
                             finish();
-                            }
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-                                loadingbar.dismiss();
-                            }
+                        }
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            // The verification code entered was invalid
+                            loadingbar.dismiss();
+                        }
                     }
                 });
     }
@@ -533,7 +533,13 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK) {
+        if (requestCode==this.RESULT_CANCELED){
+            isBoolean_permission=false;
+            fn_permission();
+        }
+        if(resultCode == Activity.RESULT_OK)
+        {
+            isBoolean_permission=true;
             if(requestCode==PICK_UP_CAM) {
                 Bundle bundle=data.getExtras();
                 bmp=(Bitmap)bundle.get("data");
@@ -605,7 +611,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                         REQUEST_PERMISSIONS);
             }
         } else {
-            boolean_permission = true;
+            isBoolean_permission = true;
         }
     }
 

@@ -138,7 +138,8 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
         setContentView(R.layout.activity_provider_sign_up);
         mAuth = FirebaseAuth.getInstance();
         sharedPreference = new SharedPreferenceConfig(this);
-        getLocationPermission();
+
+
         ActivityCompat.requestPermissions(ProviderSignUpActivity.this,
                 new String[]{Manifest.permission.CAMERA},
                 1);
@@ -238,8 +239,6 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
     }
 
     private void filter(String text) {
-
-
         apiService= APIUrl.getApiClient().create(ApiService.class);
         Call<List<Services>> call=apiService.getServices(text);
         call.enqueue(new Callback<List<Services>>() {
@@ -264,47 +263,47 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
         });
     }
 
-    //getting location permissions
-    private void getLocationPermission() {
-        Log.d(TAG,"getting location permission: called");
-        String [] permissions={
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(), COURSE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG,"permissions granted");
-                mlocation_permission_granted=true;
-            }
-            else {
-                Log.d(TAG,"permissions not granted");
-                ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUESTED_CODE);
-            }
-        }
-        else {
-            Log.d(TAG,"permissions not granted");
-            ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUESTED_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG,"on request permisions calling");
-        mlocation_permission_granted=false;
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUESTED_CODE: {
-                if(grantResults.length>0) {
-                    for(int i=0;i<grantResults.length;i++) {
-                        if((grantResults[i] != PackageManager.PERMISSION_GRANTED)) {
-                            Log.d(TAG,"not get request permissions");
-                            mlocation_permission_granted=false;
-                        }
-                    }
-                    Log.d(TAG,"permissions granted");
-                    mlocation_permission_granted=true;
-                }
-            }
-        }
-    }
+//    //getting location permissions
+//    private void getLocationPermission() {
+//        Log.d(TAG,"getting location permission: called");
+//        String [] permissions={
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.ACCESS_COARSE_LOCATION};
+//        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+//            if(ContextCompat.checkSelfPermission(this.getApplicationContext(), COURSE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
+//                Log.d(TAG,"permissions granted");
+//                mlocation_permission_granted=true;
+//            }
+//            else {
+//                Log.d(TAG,"permissions not granted");
+//                ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUESTED_CODE);
+//            }
+//        }
+//        else {
+//            Log.d(TAG,"permissions not granted");
+//            ActivityCompat.requestPermissions(this,permissions,LOCATION_PERMISSION_REQUESTED_CODE);
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        Log.d(TAG,"on request permisions calling");
+//        mlocation_permission_granted=false;
+//        switch (requestCode) {
+//            case LOCATION_PERMISSION_REQUESTED_CODE: {
+//                if(grantResults.length>0) {
+//                    for(int i=0;i<grantResults.length;i++) {
+//                        if((grantResults[i] != PackageManager.PERMISSION_GRANTED)) {
+//                            Log.d(TAG,"not get request permissions");
+//                            mlocation_permission_granted=false;
+//                        }
+//                    }
+//                    Log.d(TAG,"permissions granted");
+//                    mlocation_permission_granted=true;
+//                }
+//            }
+//        }
+//    }
 
     //setting location places to editText
     private AdapterView.OnItemClickListener mAutoCompleteListener=new AdapterView.OnItemClickListener() {
