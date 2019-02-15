@@ -434,8 +434,14 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
             loadingbar.setMessage("please wait,while we are authenticating with your phone");
             loadingbar.setCanceledOnTouchOutside(false);
             loadingbar.show();
-            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, provider_signup_virification.getText().toString());
-            signInWithPhoneAuthCredential(credential);
+            String code = provider_signup_virification.getText().toString().trim();
+            if(mVerificationId != null && code!= null ){
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
+                signInWithPhoneAuthCredential(credential);
+            }else {
+                Toast.makeText(this, ""+code+mVerificationId, Toast.LENGTH_SHORT).show();
+            }
+
         }
 
 
