@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UI.providers.ProviderSignUpActivity"
-    android:background="@drawable/background_image">
+    android:background="#F7F5F5">
 
 
     <RelativeLayout
@@ -66,12 +66,50 @@
                     android:paddingEnd="10dp"
                     android:textSize="15sp"
                     android:visibility="visible" />
+                <LinearLayout
+                    android:id="@+id/privacy"
+                    android:background="@drawable/stroke_background"
+                    android:layout_below="@+id/provider_signup_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Phone number privacy"
+                        android:layout_margin="8dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <CheckBox
+                            android:id="@+id/privacyShow"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="show"
+                            android:layout_weight="1" />
+                        <CheckBox
+                            android:id="@+id/privacyHide"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="hide"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
 
                 <AutoCompleteTextView
                     android:id="@+id/provider_signup_Location"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@+id/provider_signup_phone"
+                    android:layout_below="@+id/privacy"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="10dp"
@@ -131,12 +169,82 @@
                     android:textSize="15sp"
                     android:visibility="visible" />
 
+                <LinearLayout
+                    android:id="@+id/discountPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/stroke_background"
+                    android:layout_below="@+id/provider_service_descp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Service Discount(%)"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="8dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="MIN :"
+                            android:gravity="center_horizontal"
+                            />
+
+                        <EditText
+                            android:id="@+id/edtMinDiscount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:imeOptions="actionNext"
+                            android:maxLength="3"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="MAX :"
+                            android:gravity="center_horizontal"/>
+
+                        <EditText
+                            android:id="@+id/edtMaxDiscount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="number"
+                            android:imeOptions="actionNext"
+                            android:maxLength="3"/>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
 
                 <EditText
                     android:id="@+id/provider_agentRefId"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@+id/provider_service_descp"
+                    android:layout_below="@+id/discountPrice"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="15sp"
@@ -153,32 +261,12 @@
                     android:visibility="visible" />
 
 
-                <EditText
-                    android:id="@+id/provider_date_of_birth"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@+id/provider_agentRefId"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/stroke_background"
-                    android:drawableEnd="@drawable/ic_date_range_black_24dp"
-                    android:gravity="center_vertical"
-                    android:hint="Enter date of birth (mm/dd/yyyy)"
-                    android:imeOptions="actionNext"
-                    android:inputType="date"
-                    android:paddingStart="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingEnd="10dp"
-                    android:textSize="15sp"
-                    android:visibility="visible" />
 
                 <EditText
                     android:id="@+id/provider_signup_website_url"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@+id/provider_date_of_birth"
+                    android:layout_below="@+id/provider_agentRefId"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="15sp"
@@ -225,14 +313,20 @@
                         android:id="@+id/provider_radio_btn_male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="50dp"
+                        android:layout_marginEnd="20dp"
                         android:text="Male" />
 
                     <RadioButton
                         android:id="@+id/provider_radio_btn_female"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Female" />
+                        android:text="Female"
+                        android:layout_marginEnd="20dp"/>
+                    <RadioButton
+                        android:id="@+id/provider_radio_btn_others"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Otherss" />
                 </RadioGroup>
 
                 <ImageView

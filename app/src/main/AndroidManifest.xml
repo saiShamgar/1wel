@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:name=".Api.AppController"
@@ -19,11 +20,16 @@
         android:roundIcon="@drawable/one_wel_loge"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".UI.CustomerVerification"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".UI.MainActivity"></activity>
+        <activity
+            android:name=".UI.CustomerRegistrationActivity"
+            android:parentActivityName=".UI.MainActivity"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".UI.SplashScreenActivity"
-            android:theme="@style/AppTheme1">
-
-        </activity>
+            android:theme="@style/AppTheme1" />
         <activity
             android:name=".UI.MainActivity"
             android:theme="@style/AppTheme1">
@@ -33,31 +39,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.Agent.AgentLoginActivity"
-            android:parentActivityName=".UI.MainActivity"/>
-        <activity android:name=".UI.Agent.AgentSignUpActivity"
-            android:parentActivityName=".UI.Agent.AgentLoginActivity"/>
+        <activity
+            android:name=".UI.Agent.AgentLoginActivity"
+            android:parentActivityName=".UI.MainActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".UI.Agent.AgentSignUpActivity"
+            android:parentActivityName=".UI.Agent.AgentLoginActivity"
+            android:theme="@style/AppTheme"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/places_key" />
 
-        <activity android:name=".UI.providers.ProviderSignUpActivity"
-            android:parentActivityName=".UI.MainActivity"/>
+        <activity
+            android:name=".UI.providers.ProviderSignUpActivity"
+            android:parentActivityName=".UI.MainActivity"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".UI.Agent.AgentProfileSettings"
             android:parentActivityName=".UI.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".UI.BlockSearchItemActivity"
-            android:parentActivityName=".UI.MainActivity">
-        </activity>
-        <activity android:name=".UI.PaymentActivity"
-            android:parentActivityName=".UI.MainActivity">
-        </activity>
+            android:theme="@style/AppTheme1" />
+        <activity
+            android:name=".UI.BlockSearchItemActivity"
+            android:parentActivityName=".UI.MainActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".UI.PaymentActivity"
+            android:parentActivityName=".UI.MainActivity"
+            android:theme="@style/AppTheme"/>
 
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="@string/razorpaykeytext"/>
+            android:value="@string/razorpaykeytext" />
     </application>
 
 </manifest>

@@ -20,8 +20,12 @@ public class SearchItems {
     String service_des;
     @SerializedName("profile_pic")
     String image;
+    @SerializedName("phone_status")
+    String phone_status;
+    @SerializedName("service_discount")
+    String service_discount;
 
-    public SearchItems(String name, String user_id, String phone, String service, String address, String webSiteUrl, String service_des, String image) {
+    public SearchItems(String name, String user_id, String phone, String service, String address, String webSiteUrl, String service_des, String image, String phone_status, String service_discount) {
         this.name = name;
         this.user_id = user_id;
         this.phone = phone;
@@ -30,6 +34,24 @@ public class SearchItems {
         this.webSiteUrl = webSiteUrl;
         this.service_des = service_des;
         this.image = image;
+        this.phone_status = phone_status;
+        this.service_discount = service_discount;
+    }
+
+    public String getPhone_status() {
+        return phone_status;
+    }
+
+    public void setPhone_status(String phone_status) {
+        this.phone_status = phone_status;
+    }
+
+    public String getService_discount() {
+        return service_discount;
+    }
+
+    public void setService_discount(String service_discount) {
+        this.service_discount = service_discount;
     }
 
     public String getName() {

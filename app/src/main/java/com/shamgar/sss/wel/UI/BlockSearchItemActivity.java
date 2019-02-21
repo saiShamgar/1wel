@@ -220,23 +220,4 @@ public class BlockSearchItemActivity extends AppCompatActivity implements View.O
                     }
                 });
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home){
-            Intent agentSignUp=new Intent(BlockSearchItemActivity.this,MainActivity.class);
-            startActivity(agentSignUp);
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent agentSignUp=new Intent(BlockSearchItemActivity.this,MainActivity.class);
-        startActivity(agentSignUp);
-        finish();
-    }
-
 }

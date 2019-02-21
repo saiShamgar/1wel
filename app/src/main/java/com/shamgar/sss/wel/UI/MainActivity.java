@@ -1,13 +1,17 @@
 package com.shamgar.sss.wel.UI;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CircularProgressDrawable;
@@ -16,6 +20,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -78,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     //widgets
     private AutoCompleteTextView mSearchText,edt_search_items;
-    private CircleImageView one_wel_logo;
-    private TextView one_wel_agent,one_wel_provider,searchGo;
+    private CircleImageView one_wel_logo,circleImageView;
+    private TextView one_wel_agent,one_wel_provider,searchGo,one_wel_customer;
     ArrayList<String> mainCategoryList = new ArrayList<String>();
     private ImageButton searchItemBlockOption;
 
@@ -93,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private String latitude,longitude;
     private ProgressDialog progressDialog;
+    private ConstraintLayout imagesLayout;
 
 
     @Override
@@ -107,14 +113,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         recycler_view=findViewById(R.id.recycler_view);
         edt_search_items=findViewById(R.id.edt_search_items);
         searchGo=findViewById(R.id.searchGo);
+        one_wel_customer=findViewById(R.id.one_wel_customer);
+        imagesLayout=findViewById(R.id.imagesLayout);
+        circleImageView=findViewById(R.id.circleImageView);
 
         progressDialog=new ProgressDialog(this);
         progressDialog.setTitle("Getting Search Items");
         progressDialog.setMessage("Please wait...,");
         progressDialog.setCanceledOnTouchOutside(false);
 
-        boolean defaultValue1 = false;
-        final boolean provider = getIntent().getBooleanExtra("provider registered", defaultValue1);
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.CALL_PHONE},
+                1);
+
+
 
          if (sharedPreferenceConfig.readAgentLoggedin().contains("agent registered")){
              one_wel_agent.setVisibility(View.GONE);
@@ -137,21 +149,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                      profileSettings.putExtra("token",token);
                      profileSettings.putExtra("image",image);
                      startActivity(profileSettings);
-                     finish();
-
                  }
              });
          }
-         if (sharedPreferenceConfig.readAgentLoggedin().contains("agent registered") || provider){
-             one_wel_agent.setVisibility(View.GONE);
-         }
+
 
         one_wel_agent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent agentActivity=new Intent(MainActivity.this, AgentLoginActivity.class);
                 startActivity(agentActivity);
-                finish();
+
 
             }
         });
@@ -160,7 +168,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View v) {
                 Intent provider_activity=new Intent(MainActivity.this, ProviderSignUpActivity.class);
                 startActivity(provider_activity);
-                finish();
+
+            }
+        });
+
+        circleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imagesLayout.setVisibility(View.GONE);
             }
         });
 
@@ -195,6 +210,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         searchGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (TextUtils.isEmpty(mSearchText.getText().toString())){
+                    mSearchText.setError("Field Cannot be Empty");
+                    return;
+                }
+                if (TextUtils.isEmpty(edt_search_items.getText().toString())){
+                    edt_search_items.setError("Field Cannot be Empty");
+                    return;
+                }
+
                 progressDialog.show();
                 apiService= APIUrl.getApiClient().create(ApiService.class);
                 Call<List<SearchItems>> call=apiService.search(latitude,longitude,edt_search_items.getText().toString());
@@ -225,6 +250,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         Toast.makeText(getApplicationContext(),"some error occured",Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+        });
+
+        one_wel_customer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String[] items = new String[]{"Registration", "Verification"};
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item, items);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == 0) {
+                            Intent register=new Intent(MainActivity.this,CustomerRegistrationActivity.class);
+                            startActivity(register);
+
+
+                        } else if (i == 1) {
+                            Intent verification=new Intent(MainActivity.this,CustomerVerification.class);
+                            startActivity(verification);
+
+                        }
+                        dialogInterface.cancel();
+                    }
+                });
+                builder.create();
+                builder.show();
             }
         });
     }

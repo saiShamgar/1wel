@@ -72,7 +72,8 @@ public interface ApiService {
             @Field("profile_pic")String profile_pic,
             @Field("address")String address,
             @Field("referer_id")String referer_id,
-            @Field("dob")String dob,
+            @Field("service_discount")String service_discount,
+            @Field("phone_status")String phone_status,
             @Field("website_url")String website_url,
             @Field("service")String service,
             @Field("service_desc")String service_des);
@@ -123,6 +124,26 @@ public interface ApiService {
     Call<Status> deleteprovider(
             @Query("user_id") String user_id,
             @Query("phone") String phone);
+
+
+    @Headers("X-API-KEY:" + "SHANKAR@111")
+    @FormUrlEncoded
+    @POST("users_list/users/customer/")
+    Call<Status> customerRegistration(
+            @Field("username") String user,
+            @Field("phone") String phone);
+
+    @Headers("X-API-KEY:" + "SHANKAR@111")
+    @FormUrlEncoded
+    @POST("users_list/users/verify_customer/")
+    Call<Status> customerVerification(
+            @Field("customer_id") String customerId,
+            @Field("provider_id") String verificationID,
+            @Field("purchased_amount") String purchasedAmount);
+
+   // http://www.yesinteriors.online/1wel/users_list/users/verify_customer
+
+   // http://www.yesinteriors.online/1wel/users_list/users/customer
 
 
     //http://www.yesinteriors.online/1wel/users_list/users/provider_delete?user_id=106&phone=9642542514

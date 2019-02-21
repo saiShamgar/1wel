@@ -30,5 +30,8 @@
     <string name="provider_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
     <string name="provider_dob_preference">com.example.sss.wel.Utils.dob_preference</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

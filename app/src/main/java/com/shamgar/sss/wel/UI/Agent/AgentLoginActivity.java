@@ -180,22 +180,4 @@ public class AgentLoginActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home){
-            Intent agentSignUp=new Intent(AgentLoginActivity.this,MainActivity.class);
-            startActivity(agentSignUp);
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent agentSignUp=new Intent(AgentLoginActivity.this,MainActivity.class);
-        startActivity(agentSignUp);
-        finish();
-    }
 }

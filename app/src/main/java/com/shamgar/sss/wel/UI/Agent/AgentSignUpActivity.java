@@ -86,9 +86,9 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
 
     //registration Widgets
     private EditText agent_signup_name,agent_signup_phone,agent_signup_pass,agent_signup_confirm_pass,
-            agent_signup_ReEnterBank_Account_num,agent_signup_AadharNum,agent_signup_Bank_name,agent_signup_Bank_Account_num,agent_signup_Bank_Ifsc_Code,agent_signup_virification,agent_signup_date_of_birth;
+            agent_signup_ReEnterBank_Account_num,agent_signup_AadharNum,agent_signup_Bank_name,agent_signup_Bank_Account_num,agent_signup_Bank_Ifsc_Code,agent_signup_virification;
     private Button agent_submit_personal_details,agent_submit_bank_details,upload_image_agent,agent_reg_submit_btn,agent_verification_btn;
-    private RadioButton radio_btn_male,radio_btn_female;
+    private RadioButton radio_btn_male,radio_btn_female,radio_btn_others;
     private ImageView agent_image;
     private RadioGroup radioGroup;
     private TextView txt_otp_hint;
@@ -162,7 +162,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         agent_signup_Bank_Account_num=findViewById(R.id.agent_signup_Bank_Account_num);
         agent_signup_Bank_Ifsc_Code=findViewById(R.id.agent_signup_Bank_Ifsc_Code);
         agent_signup_virification=findViewById(R.id.agent_signup_virification);
-        agent_signup_date_of_birth=findViewById(R.id.agent_signup_date_of_birth);
         agent_signup_ReEnterBank_Account_num=findViewById(R.id.agent_signup_ReEnterBank_Account_num);
 
 
@@ -183,6 +182,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         radio_btn_male=findViewById(R.id.radio_btn_male);
         radio_btn_female=findViewById(R.id.radio_btn_female);
         radioGroup=findViewById(R.id.radioGroup);
+        radio_btn_others=findViewById(R.id.radio_btn_others);
 
         //implementing click listeners
         agent_submit_personal_details.setOnClickListener(this);
@@ -239,7 +239,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
 
                 //you can use lat with qLoc.latitude;
                 //and long with qLoc.longitude;
-
                 places.release();
                 return;
             }
@@ -303,7 +302,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             agent_signup_pass.setVisibility(View.GONE);
             agent_signup_confirm_pass.setVisibility(View.GONE);
             agent_submit_personal_details.setVisibility(View.GONE);
-            agent_signup_date_of_birth.setVisibility(View.GONE);
 
             agent_signup_AadharNum.setVisibility(View.VISIBLE);
             agent_signup_Bank_name.setVisibility(View.VISIBLE);
@@ -361,7 +359,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         }
         if (v.getId()==R.id.agent_reg_submit_btn){
 
-            if (!(radio_btn_male.isChecked() || radio_btn_female.isChecked())){
+            if (!(radio_btn_male.isChecked() || radio_btn_female.isChecked() || radio_btn_others.isChecked())){
                 Toast.makeText(getApplicationContext(),"select your gender",Toast.LENGTH_LONG).show();
                 return;
             }
@@ -369,6 +367,8 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                 sharedPreference.writeAgentGender("male");
             if (radio_btn_female.isChecked())
                 sharedPreference.writeAgentGender("female");
+            if (radio_btn_others.isChecked())
+                sharedPreference.writeAgentGender("others");
 
             loadingbar=new ProgressDialog(this);
             //sending verification code
@@ -442,54 +442,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             signInWithPhoneAuthCredential(credential);
         }
 
-
-//callbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-// 8jkl;i0op
-    //}
-//            @Override
-//            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-//                signInWithPhoneAuthCredential(phoneAuthCredential);
-//            }
-//
-//            @Override
-//            public void onVerificationFailed(FirebaseException e)
-//            {
-//                loadingbar.dismiss();
-//                Toast.makeText(getApplicationContext(),"Invalid phone number, please enter valid number",Toast.LENGTH_LONG).show();
-//
-//                radioGroup.setVisibility(View.VISIBLE);
-//                agent_image.setVisibility(View.VISIBLE);
-//                upload_image_agent.setVisibility(View.VISIBLE);
-//                agent_reg_submit_btn.setVisibility(View.VISIBLE);
-//                agent_reg_submit_btn.setText("Re-submit");
-//
-//                txt_otp_hint.setVisibility(View.GONE);
-//                agent_signup_virification.setVisibility(View.GONE);
-//                agent_verification_btn.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onCodeSent(String verificationId,
-//                                   PhoneAuthProvider.ForceResendingToken token) {
-//                // The SMS verification code has been sent to the provided phone number, we
-//                // now need to ask the user to enter the code and then construct a credential
-//                // by combining the code with a verification ID.
-//                mVerificationId = verificationId;
-//                mResendToken = token;
-//                loadingbar.dismiss();
-//                Toast.makeText(getApplicationContext(),"code sent to the "+agent_signup_phone.getText(),Toast.LENGTH_LONG).show();
-//
-//                radioGroup.setVisibility(View.GONE);
-//                agent_image.setVisibility(View.GONE);
-//                upload_image_agent.setVisibility(View.GONE);
-//                agent_reg_submit_btn.setVisibility(View.GONE);
-//
-//                txt_otp_hint.setVisibility(View.VISIBLE);
-//                agent_signup_virification.setVisibility(View.VISIBLE);
-//                agent_verification_btn.setVisibility(View.VISIBLE);
-//            }
-//        };
-//
 
     }
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -573,23 +525,6 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
 
     //date validating
 
-    public Date validateDateFormat(String dateToValdate) {
-
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        //To make strict date format validation
-        formatter.setLenient(false);
-        Date parsedDate = null;
-        try {
-            parsedDate = formatter.parse(dateToValdate);
-            //System.out.println("++validated DATE TIME ++"+formatter.format(parsedDate));
-
-        } catch (ParseException e) {
-            agent_signup_date_of_birth.setError("invalid date format");
-            //Handle exception
-        }
-        return parsedDate;
-    }
-
     private void fn_permission() {
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)||
                 (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)||
@@ -613,24 +548,5 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         } else {
             isBoolean_permission = true;
         }
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home){
-            Intent agentSignUp=new Intent(AgentSignUpActivity.this,AgentLoginActivity.class);
-            startActivity(agentSignUp);
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent agentSignUp=new Intent(AgentSignUpActivity.this,AgentLoginActivity.class);
-        startActivity(agentSignUp);
-        finish();
     }
 }

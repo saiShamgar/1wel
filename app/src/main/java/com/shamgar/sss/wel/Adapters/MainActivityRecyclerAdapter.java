@@ -1,20 +1,24 @@
 package com.shamgar.sss.wel.Adapters;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.CircularProgressDrawable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextThemeWrapper;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -27,12 +31,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.shamgar.sss.wel.R;
 import com.shamgar.sss.wel.Models.SearchItems;
 import com.shamgar.sss.wel.UI.BlockSearchItemActivity;
+import com.shamgar.sss.wel.UI.MainActivity;
 
 
-import java.security.PrivateKey;
 import java.util.List;
-
-import javax.xml.validation.Validator;
 
 public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivityRecyclerAdapter.MainActivityViewHolder> {
 
@@ -40,9 +42,9 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
     private Context context;
     private List<SearchItems> searchItems;
 
-    public MainActivityRecyclerAdapter( Context context,List<SearchItems> searchItems) {
+    public MainActivityRecyclerAdapter(Context mainActivity, List<SearchItems> searchItems) {
 
-        this.context = context;
+        this.context=mainActivity;
         this.searchItems=searchItems;
     }
 
@@ -50,7 +52,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
     @Override
     public MainActivityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.main_search_activity_items,parent,false);
+        View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.search_list_updated,parent,false);
         return new MainActivityViewHolder(view);
     }
 
@@ -60,9 +62,37 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
         holder.search_name_db.setText(searchItems.get(position).getName());
         holder.search_category_from_db.setText(searchItems.get(position).getService());
         holder.search_desp.setText(searchItems.get(position).getService_des());
-        holder.search_phone_from_db.setText(searchItems.get(position).getPhone());
+
         holder.search_websiteUrl_from_db.setText(searchItems.get(position).getWebSiteUrl());
         holder.search_address_fromdb.setText(searchItems.get(position).getAddress());
+
+        holder.serviceDiscountFromDB.setText(searchItems.get(position).getService_discount());
+
+        if (!TextUtils.isEmpty(searchItems.get(position).getPhone_status())){
+            Log.e("phone status",searchItems.get(position).getPhone_status());
+
+            if (searchItems.get(position).getPhone_status().equals("2")){
+                holder.search_phone_from_db.setText("privacy number");
+            }
+            else {
+                holder.search_phone_from_db.setText(searchItems.get(position).getPhone());
+            }
+        }
+
+        holder.txtCallNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent callIntent=new Intent();
+                callIntent.setAction(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"+searchItems.get(position).getPhone()));
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(context,"permissions not granted",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                context.startActivity(callIntent);
+            }
+        });
+
 
         if(!searchItems.get(position).getImage().equals("")){
             CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
@@ -115,6 +145,7 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
         private TextView search_name_db,search_category_from_db,search_phone_from_db,search_address_fromdb,search_websiteUrl_from_db,search_desp;
         private ImageView search_item_image;
         private ImageButton searchItemBlockOption;
+        private TextView serviceDiscountFromDB,txtCallNow;
 
         public MainActivityViewHolder(View itemView) {
             super(itemView);
@@ -127,6 +158,8 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
             search_desp=itemView.findViewById(R.id.search_desp);
             search_item_image=itemView.findViewById(R.id.search_item_image);
             searchItemBlockOption=itemView.findViewById(R.id.searchItemBlockOption);
+            serviceDiscountFromDB=itemView.findViewById(R.id.serviceDiscountFromDB);
+            txtCallNow=itemView.findViewById(R.id.txtCallNow);
         }
     }
 }

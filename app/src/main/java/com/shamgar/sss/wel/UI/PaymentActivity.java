@@ -125,69 +125,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
             progressDialog.setMessage("storing details into records");
             progressDialog.setCanceledOnTouchOutside(false);
             String userType=getIntent().getExtras().getString("user_type");
-            if (userType.contains("provider")){
-                apiService= APIUrl.getApiClient().create(ApiService.class);
+             if (userType.contains("agent")){
                 progressDialog.show();
-//
-                            Log.e("email",sharedPreferenceConfig.readProviderName());
-                            Log.e("phone",sharedPreferenceConfig.readProviderPhone());
-                            Log.e("latitude",latitude);
-                            Log.e("longitude",longitude);
-                           // Log.e("ser", String.valueOf(serviceMain));
-                           // Log.e("dfs", String.valueOf(serviceSub));
-                            Log.e("gender", sharedPreferenceConfig.readProviderWebsite());
-                            Log.e("addres",address);
-                            Log.e("dob",sharedPreferenceConfig.readProviderDob());
-                            Log.e("dob",sharedPreferenceConfig.readProviderGender());
-                            Log.e("dob",service_desp);
-                            Call<Status> call=apiService.ProviderRegistration(
-                                    sharedPreferenceConfig.readProviderName(),
-                                    sharedPreferenceConfig.readProviderPhone(),
-                                    latitude,
-                                    longitude,
-                                    sharedPreferenceConfig.readProviderGender(),
-                                    sharedPreferenceConfig.readProviderPic(),
-                                    address,
-                                    refId,
-                                    sharedPreferenceConfig.readProviderDob(),
-                                    sharedPreferenceConfig.readProviderWebsite(),
-                                    service_type,
-                                    service_desp);
-                                 //   providerServiceDescription.getText().toString());
-                            call.enqueue(new Callback<Status>() {
-                                @Override
-                                public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
-                                    progressDialog.dismiss();
-                                    if (response.body()==null) {
-                                       Toast.makeText(getApplicationContext(), "some error was occured/please register again", Toast.LENGTH_LONG).show();
-                                    }
-                                    Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
-                                    Intent agentLogin = new Intent(PaymentActivity.this, MainActivity.class);
-                                    startActivity(agentLogin);
-                                    finish();
-                                }
-                                @Override
-                                public void onFailure(Call<Status> call, Throwable t) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(),"registration Not Successful",Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-            }else if (userType.contains("agent")){
-                progressDialog.show();
-                Log.e("email",sharedPreferenceConfig.readAgentEmail());
-                Log.e("phone",sharedPreferenceConfig.readAgentPhone());
-                Log.e("latitude",latitude);
-                Log.e("longitude",longitude);
-                Log.e("pass",sharedPreferenceConfig.readAgentPassword());
-                Log.e("aadhar",sharedPreferenceConfig.readAgentAadhar());
-                Log.e("bank name",sharedPreferenceConfig.readAgentBankName());
-                Log.e("bank num",sharedPreferenceConfig.readAgentBankNumber());
-                Log.e("bank ifsc",sharedPreferenceConfig.readAgentBankIfsc());
-                Log.e("gender",sharedPreferenceConfig.readAgentGender());
-                Log.e("addres",address);
-                Log.e("dob",sharedPreferenceConfig.readAgentDob());
-
                 apiService=APIUrl.getApiClient().create(ApiService.class);
                 Call<Status> call=apiService.agentRegistration(
                         sharedPreferenceConfig.readAgentEmail(),
@@ -203,7 +142,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
                         sharedPreferenceConfig.readAgentGender(),
                         sharedPreferenceConfig.readAgentPic(),
                         address,
-                        sharedPreferenceConfig.readAgentDob());
+                        "null");
                 call.enqueue(new Callback<Status>() {
                     @Override
                     public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {
@@ -252,23 +191,5 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
         int randomPin   =(int)(Math.random()*9000)+1000;
         String otp  = String.valueOf(randomPin);
         return otp;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home){
-            Intent agentSignUp=new Intent(PaymentActivity.this,MainActivity.class);
-            startActivity(agentSignUp);
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent agentSignUp=new Intent(PaymentActivity.this,MainActivity.class);
-        startActivity(agentSignUp);
-        finish();
     }
 }

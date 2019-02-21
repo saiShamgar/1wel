@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +42,7 @@ public class AgentProfileSettings extends AppCompatActivity {
     private ApiService apiService;
     private Toolbar toolbar;
     private ImageView expandedImage;
-    private TextView agent_refered_count,agent_refered_id_text;
+    private TextView agent_refered_count,agent_refered_id_text,logoutAgent;
     private RecyclerView agent_profile_recyclerview;
     private ProgressDialog progressDialog;
 
@@ -55,8 +56,6 @@ public class AgentProfileSettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_profile_settings);
         sharedPreferenceConfig=new SharedPreferenceConfig(this);
-
-
         progressDialog=new ProgressDialog(this);
         progressDialog.setTitle("Getting referred people");
         progressDialog.setMessage("Please wait...,");
@@ -67,6 +66,7 @@ public class AgentProfileSettings extends AppCompatActivity {
         agent_refered_count=(TextView)findViewById(R.id.agent_refered_count);
         agent_refered_id_text=(TextView)findViewById(R.id.agent_refered_id_text);
         agent_profile_recyclerview=(RecyclerView)findViewById(R.id.agent_profile_recyclerview);
+        logoutAgent=(TextView) findViewById(R.id.logoutAgent);
         String Username = getIntent().getStringExtra("name");
         String token = getIntent().getStringExtra("token");
         String image = getIntent().getStringExtra("image");
@@ -124,65 +124,57 @@ public class AgentProfileSettings extends AppCompatActivity {
             }
         });
 
-
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.agent_menu_options, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==R.id.agentLogout){
-            progressDialog.setTitle("Logging out");
-            progressDialog.setMessage("Please wait...,");
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
-            apiService= APIUrl.getApiClient().create(ApiService.class);
-            retrofit2.Call<Status> call=apiService.agentLogout();
-            call.enqueue(new Callback<Status>() {
-                @Override
-                public void onResponse(retrofit2.Call<Status> call, Response<Status> response) {
-                    if (response.body()==null) {
+        logoutAgent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog.setTitle("Logging out");
+                progressDialog.setMessage("Please wait...,");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+                apiService= APIUrl.getApiClient().create(ApiService.class);
+                retrofit2.Call<Status> call=apiService.agentLogout();
+                call.enqueue(new Callback<Status>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<Status> call, Response<Status> response) {
+                        if (response.body()==null) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(),"responce error",Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(),"responce error",Toast.LENGTH_LONG).show();
-                        return;
+                        Toast.makeText(getApplicationContext(),"responce "+response.body().getMessage(),Toast.LENGTH_LONG).show();
+                        sharedPreferenceConfig.writeAgentLoggedIn("logout");
+                        SharedPreferences preferences=getApplicationContext().getSharedPreferences("userLog",MODE_PRIVATE);
+                        SharedPreferences.Editor editor=preferences.edit();
+                        editor.clear();
+                        editor.commit();
+                        Intent logout=new Intent(AgentProfileSettings.this,MainActivity.class);
+                        startActivity(logout);
+                        finish();
                     }
-                    progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(),"responce "+response.body().getMessage(),Toast.LENGTH_LONG).show();
-                    sharedPreferenceConfig.writeAgentLoggedIn("logout");
-                    SharedPreferences preferences=getApplicationContext().getSharedPreferences("userLog",MODE_PRIVATE);
-                    SharedPreferences.Editor editor=preferences.edit();
-                    editor.clear();
-                    editor.commit();
-                    Intent logout=new Intent(AgentProfileSettings.this,MainActivity.class);
-                    startActivity(logout);
-                    finish();
-                }
-                @Override
-                public void onFailure(retrofit2.Call<Status> call, Throwable t) {
-                    progressDialog.dismiss();
-                }
-            });
-        }
+                    @Override
+                    public void onFailure(retrofit2.Call<Status> call, Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        });
 
-        if (item.getItemId()==android.R.id.home){
-            Intent agentSignUp=new Intent(AgentProfileSettings.this,MainActivity.class);
-            startActivity(agentSignUp);
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
+
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent agentSignUp=new Intent(AgentProfileSettings.this,MainActivity.class);
-        startActivity(agentSignUp);
-        finish();
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.agent_menu_options, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId()==R.id.agentLogout){
+//
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 }
