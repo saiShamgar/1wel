@@ -85,7 +85,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
     private AutoCompleteTextView mSearchText;
 
     //registration Widgets
-    private EditText agent_signup_name,agent_signup_phone,agent_signup_pass,agent_signup_confirm_pass,
+    private EditText agent_signup_name,agent_signup_phone,agent_signup_pass,agent_signup_confirm_pass,agent_signup_Refid,
             agent_signup_ReEnterBank_Account_num,agent_signup_AadharNum,agent_signup_Bank_name,agent_signup_Bank_Account_num,agent_signup_Bank_Ifsc_Code,agent_signup_virification;
     private Button agent_submit_personal_details,agent_submit_bank_details,upload_image_agent,agent_reg_submit_btn,agent_verification_btn;
     private RadioButton radio_btn_male,radio_btn_female,radio_btn_others;
@@ -163,6 +163,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
         agent_signup_Bank_Ifsc_Code=findViewById(R.id.agent_signup_Bank_Ifsc_Code);
         agent_signup_virification=findViewById(R.id.agent_signup_virification);
         agent_signup_ReEnterBank_Account_num=findViewById(R.id.agent_signup_ReEnterBank_Account_num);
+        agent_signup_Refid=findViewById(R.id.agent_signup_Refid);
 
 
         //initialize button widgets
@@ -302,6 +303,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
             agent_signup_pass.setVisibility(View.GONE);
             agent_signup_confirm_pass.setVisibility(View.GONE);
             agent_submit_personal_details.setVisibility(View.GONE);
+            agent_signup_Refid.setVisibility(View.GONE);
 
             agent_signup_AadharNum.setVisibility(View.VISIBLE);
             agent_signup_Bank_name.setVisibility(View.VISIBLE);

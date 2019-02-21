@@ -101,12 +101,12 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="4dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/one_wel_loge"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.014"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -177,7 +177,7 @@
 
             <TextView
                 android:id="@+id/search_address_fromdb"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/servicer_address"
                 android:layout_marginStart="10dp"
@@ -186,7 +186,7 @@
                 android:text="Address"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.255"
                 app:layout_constraintStart_toEndOf="@+id/servicer_address"
                 app:layout_constraintTop_toBottomOf="@+id/search_phone_from_db" />
 
@@ -205,23 +205,43 @@
                 app:layout_constraintTop_toBottomOf="@+id/search_address_fromdb" />
 
             <TextView
+                android:id="@+id/search_Advertiment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/search_address_fromdb"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="ADVT Details :"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintStart_toEndOf="@+id/search_item_image"
+                app:layout_constraintTop_toBottomOf="@+id/search_websiteUrl"
+                app:layout_constraintVertical_bias="1.0" />
+
+
+            <TextView
                 android:id="@+id/search_desp"
-                android:layout_width="120dp"
-                android:layout_height="43dp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/search_item_image"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="nurse"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/search_item_image" />
+                app:layout_constraintStart_toEndOf="@+id/search_Advertiment"
+                app:layout_constraintTop_toBottomOf="@+id/search_websiteUrl_from_db"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/search_name_db"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/servicer_name"
                 android:text="sai"
@@ -233,7 +253,7 @@
 
             <TextView
                 android:id="@+id/search_category_from_db"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_toRightOf="@+id/search_service_type"
@@ -246,7 +266,7 @@
 
             <TextView
                 android:id="@+id/search_phone_from_db"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="123456889"
@@ -258,7 +278,7 @@
 
             <TextView
                 android:id="@+id/search_websiteUrl_from_db"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/search_address_fromdb"
                 android:layout_marginStart="8dp"
