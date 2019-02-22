@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import com.shamgar.sss.wel.Adapters.AdvertisementAdapter;
 import com.shamgar.sss.wel.R;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -62,6 +64,8 @@ import com.shamgar.sss.wel.Utils.SharedPreferenceConfig;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.StatementEvent;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -83,8 +87,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     //widgets
     private AutoCompleteTextView mSearchText,edt_search_items;
-    private CircleImageView one_wel_logo,circleImageView;
-    private TextView one_wel_agent,one_wel_provider,searchGo,one_wel_customer;
+    private CircleImageView one_wel_logo;
+    private TextView one_wel_agent,one_wel_provider,searchGo,one_wel_customer,advtHeading;
     ArrayList<String> mainCategoryList = new ArrayList<String>();
     private ImageButton searchItemBlockOption;
 
@@ -98,7 +102,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private String latitude,longitude;
     private ProgressDialog progressDialog;
-    private ConstraintLayout imagesLayout;
+
+    private ArrayList<String> advtList=new ArrayList<>();
+    private AdvertisementAdapter advertisementAdapter;
+
 
 
     @Override
@@ -114,8 +121,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         edt_search_items=findViewById(R.id.edt_search_items);
         searchGo=findViewById(R.id.searchGo);
         one_wel_customer=findViewById(R.id.one_wel_customer);
-        imagesLayout=findViewById(R.id.imagesLayout);
-        circleImageView=findViewById(R.id.circleImageView);
+        advtHeading=findViewById(R.id.advtHeading);
+
+        advtList.add("Jewelery");
+        advtList.add("Hospitals");
+        advtList.add("Auto/Travels/Car");
+        advtList.add("Schools");
+        advtList.add("Beauty parlours");
+        advtList.add("Marriage Buero");
+        advtList.add("Hotels");
+        advtList.add("Saloons");
+        advtList.add("Events");
+        advtList.add("Rent/To-let");
+        advtList.add("Jobs/consultancy");
+        advtList.add("Medical Shops");
+        advtList.add("Shopping Malls");
+        advtList.add("Foot Wears");
+        advtList.add("Bike Mechanic");
+        advtList.add("Car Mechanic");
+        advtList.add("Car Wash");
+        advtList.add("Tailor");
+        advtList.add("Electricians");
+        advtList.add("Plumber");
+        advtList.add("Tile/Marble Fitter");
+        advtList.add("Sealing Worker");
+        advtList.add("Carpenter");
+        advtList.add("Interial Designer");
+        advtList.add("Welding");
+        advtList.add("House keeping");
+        advtList.add("Labour");
+
+        advertisementAdapter=new AdvertisementAdapter(this,advtList);
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
+        recycler_view.setAdapter(advertisementAdapter);
+        recycler_view.setNestedScrollingEnabled(false);
+        advertisementAdapter.notifyDataSetChanged();
+
 
         progressDialog=new ProgressDialog(this);
         progressDialog.setTitle("Getting Search Items");
@@ -172,12 +214,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        circleImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imagesLayout.setVisibility(View.GONE);
-            }
-        });
+
 
         //Initializing google api client
         googleApiClient=new GoogleApiClient
@@ -220,10 +257,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     return;
                 }
 
+
                 progressDialog.show();
                 apiService= APIUrl.getApiClient().create(ApiService.class);
                 Call<List<SearchItems>> call=apiService.search(latitude,longitude,edt_search_items.getText().toString());
-
                 call.enqueue(new Callback<List<SearchItems>>() {
                     @Override
                     public void onResponse(Call<List<SearchItems>> call, Response<List<SearchItems>> response) {
@@ -236,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         }
                         progressDialog.dismiss();
                        // Toast.makeText(getApplicationContext(),"items"+services_types,Toast.LENGTH_LONG).show();
+                        advtHeading.setVisibility(View.GONE);
                         adapter=new MainActivityRecyclerAdapter(getApplicationContext(),searchItems);
                         recycler_view.setHasFixedSize(true);
                         recycler_view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -256,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         one_wel_customer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String[] items = new String[]{"Registration", "Verification"};
+                final String[] items = new String[]{"Customer Registration", "Customer Verification"};
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item, items);
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
@@ -265,8 +303,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         if (i == 0) {
                             Intent register=new Intent(MainActivity.this,CustomerRegistrationActivity.class);
                             startActivity(register);
-
-
                         } else if (i == 1) {
                             Intent verification=new Intent(MainActivity.this,CustomerVerification.class);
                             startActivity(verification);
@@ -306,10 +342,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         });
     }
 
-
-
-
-//
     private AdapterView.OnItemClickListener mAutoCompleteListener=new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -339,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             longitude= String.valueOf(qLoc.longitude);
 
 
-            Toast.makeText(getApplicationContext(),"location "+qLoc,Toast.LENGTH_LONG).show();
+           // Toast.makeText(getApplicationContext(),"location "+qLoc,Toast.LENGTH_LONG).show();
             places.release();
         }
     };

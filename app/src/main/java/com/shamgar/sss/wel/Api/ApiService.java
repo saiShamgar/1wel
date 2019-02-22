@@ -57,7 +57,7 @@ public interface ApiService {
             @Field("gender")String gender,
             @Field("profile_pic")String profile_pic,
             @Field("address")String address,
-            @Field("dob")String dob);
+            @Field("referer_id")String referer_id);
 
 
     @Headers("X-API-KEY:" + "SHANKAR@111")
@@ -131,7 +131,8 @@ public interface ApiService {
     @POST("users_list/users/customer/")
     Call<Status> customerRegistration(
             @Field("username") String user,
-            @Field("phone") String phone);
+            @Field("phone") String phone,
+            @Field("referer_id")String referer_id);
 
     @Headers("X-API-KEY:" + "SHANKAR@111")
     @FormUrlEncoded

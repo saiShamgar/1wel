@@ -344,7 +344,7 @@ public class ProviderSignUpActivity extends AppCompatActivity implements GoogleA
                 providerServiceDescription.setError("Field cannot be blank");
                 return;
             }
-            if (providerServiceDescription.length()>50){
+            if (providerServiceDescription.length()>500){
                 providerServiceDescription.setError("input field max 50 characters");
                 return;
 

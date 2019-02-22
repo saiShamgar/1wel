@@ -461,6 +461,7 @@ public class AgentSignUpActivity extends AppCompatActivity implements GoogleApiC
                             payment.putExtra("latitude",latitude);
                             payment.putExtra("longitude",longitude);
                             payment.putExtra("address",mSearchText.getText().toString());
+                            payment.putExtra("refId",agent_signup_Refid.getText().toString());
                             startActivity(payment);
                             finish();
                         }

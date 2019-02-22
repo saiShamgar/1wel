@@ -142,7 +142,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
                         sharedPreferenceConfig.readAgentGender(),
                         sharedPreferenceConfig.readAgentPic(),
                         address,
-                        "null");
+                        refId);
                 call.enqueue(new Callback<Status>() {
                     @Override
                     public void onResponse(Call<Status> call, retrofit2.Response<Status> response) {

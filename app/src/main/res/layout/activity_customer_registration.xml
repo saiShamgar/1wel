@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
@@ -8,7 +9,7 @@
     android:background="#F7F5F5"
     tools:context=".UI.CustomerRegistrationActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -25,57 +26,54 @@
 
         <EditText
             android:id="@+id/editCustomerName"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="80dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="Enter your Name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.418" />
+            android:hint="Enter your Name" />
 
         <EditText
             android:id="@+id/edtCustomerPhone"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="41dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginTop="15dp"
             android:ems="10"
-            android:inputType="number"
             android:hint="Enter your Number"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editCustomerName"
-            app:layout_constraintVertical_bias="0.095" />
+            android:inputType="number"
+           android:layout_below="@+id/editCustomerName" />
 
         <Button
             android:id="@+id/btnCustomerReg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="60dp"
-            android:layout_marginBottom="8dp"
+            android:background="@drawable/green_round_background"
             android:text="Pay RS 100"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:background="@drawable/green_round_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtCustomerPhone" />
-    </android.support.constraint.ConstraintLayout>
+            android:layout_below="@+id/edtrefId"/>
+
+        <EditText
+            android:id="@+id/edtrefId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="Enter ref ID"
+           android:layout_below="@+id/edtCustomerPhone"/>
+    </RelativeLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="111dp"

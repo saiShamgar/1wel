@@ -28,7 +28,7 @@ import retrofit2.Response;
 
 public class CustomerRegistrationActivity extends AppCompatActivity implements PaymentResultListener {
 
-    private EditText editCustomerName,edtCustomerPhone;
+    private EditText editCustomerName,edtCustomerPhone,edtrefId;
     private Button btnCustomerReg;
 
     private ApiService apiService;
@@ -47,6 +47,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity implements P
         btnCustomerReg=findViewById(R.id.btnCustomerReg);
         editCustomerName=findViewById(R.id.editCustomerName);
         edtCustomerPhone=findViewById(R.id.edtCustomerPhone);
+        edtrefId=findViewById(R.id.edtrefId);
 
         btnCustomerReg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +110,9 @@ public class CustomerRegistrationActivity extends AppCompatActivity implements P
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
             apiService= APIUrl.getApiClient().create(ApiService.class);
-            Call<Status> call=apiService.customerRegistration(editCustomerName.getText().toString(),edtCustomerPhone.getText().toString());
+            Call<Status> call=apiService.customerRegistration(editCustomerName.getText().toString(),
+                    edtCustomerPhone.getText().toString(),
+                    edtrefId.getText().toString());
             call.enqueue(new Callback<Status>() {
                 @Override
                 public void onResponse(Call<Status> call, Response<Status> response) {
