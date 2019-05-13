@@ -76,6 +76,7 @@ public interface ApiService {
             @Field("phone_status")String phone_status,
             @Field("website_url")String website_url,
             @Field("service")String service,
+            @Field("land_mark")String land_mark,
             @Field("service_desc")String service_des);
 
 

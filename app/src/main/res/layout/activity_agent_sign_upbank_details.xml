@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.Agent.AgentSignUpActivity"
+    tools:context=".UI.Agent.AgentSignUPBankDetails"
     android:background="#F7F5F5">
 
 
@@ -18,7 +18,6 @@
             android:layout_height="match_parent"
             android:paddingTop="30dp"
             android:focusableInTouchMode="true">
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -28,140 +27,106 @@
                 android:background="@drawable/white_round_background"
                 android:focusableInTouchMode="true">
 
-                //personal details
-
+                //bank account details
                 <EditText
-                    android:id="@+id/agent_signup_name"
+                    android:id="@+id/agent_signup_AadharNum"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="80dp"
-                    android:hint="Enter your username"
+                    android:hint="Enter your Aadhar"
                     android:layout_centerHorizontal="true"
                     android:textSize="15sp"
                     android:layout_marginStart="50sp"
                     android:background="@drawable/stroke_background"
                     android:paddingStart="10dp"
-                    android:inputType="textEmailAddress"
+                    android:inputType="number"
                     android:imeOptions="actionNext"
-                    android:drawableEnd="@drawable/ic_email_black_24dp"
+                    android:drawableEnd="@drawable/ic_security_black_24dp"
                     android:paddingEnd="10dp"
                     android:visibility="visible"/>
                 <EditText
-                    android:id="@+id/agent_signup_phone"
+                    android:id="@+id/agent_signup_Bank_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:paddingTop="5dp"
-                    android:hint="Enter phone"
+                    android:hint="Enter your Bank name"
+                    android:layout_centerHorizontal="true"
                     android:textSize="15sp"
-                    android:layout_below="@+id/agent_signup_name"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/stroke_background"
-                    android:paddingStart="10dp"
-                    android:inputType="phone"
-                    android:imeOptions="actionNext"
-                    android:drawableEnd="@drawable/ic_phone_android_black_24dp"
-                    android:paddingEnd="10dp"
-                    android:visibility="visible"/>
-
-                <AutoCompleteTextView
-                    android:id="@+id/agent_signup_Location"
-                    android:layout_height="50dp"
-                    android:inputType="text|textMultiLine"
-                    android:imeOptions="actionNext"
-                    android:layout_width="match_parent"
-                    android:maxLines="2"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="16dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="enter Location"
-                    android:layout_marginStart="50dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/agent_signup_phone"
-                    android:background="@drawable/stroke_background"
-                    android:drawableEnd="@drawable/ic_location_on_black_24dp"
-                    android:paddingEnd="10dp"
-                    android:paddingStart="10dp"
-                    android:visibility="visible">
-
-                </AutoCompleteTextView>
-                <EditText
-                    android:id="@+id/agent_signup_pass"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingTop="5dp"
-                    android:hint="Enter new password"
-                    android:textSize="15sp"
-                    android:layout_below="@+id/agent_signup_Refid"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/stroke_background"
-                    android:paddingStart="10dp"
-                    android:inputType="textPassword"
-                    android:imeOptions="actionNext"
-                    android:drawableEnd="@drawable/ic_lock_black_24dp"
-                    android:paddingEnd="10dp"
-                    android:visibility="visible"/>
-                <EditText
-                    android:id="@+id/agent_signup_confirm_pass"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingTop="5dp"
-                    android:hint="Enter re-enter password"
-                    android:textSize="15sp"
-                    android:layout_below="@+id/agent_signup_pass"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/stroke_background"
-                    android:paddingStart="10dp"
-                    android:inputType="textPassword"
-                    android:imeOptions="actionNext"
-                    android:drawableEnd="@drawable/ic_lock_black_24dp"
-                    android:paddingEnd="10dp"
-                    android:visibility="visible"/>
-
-                <EditText
-                    android:id="@+id/agent_signup_Refid"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingTop="5dp"
-                    android:hint="Enter ref ID"
-                    android:textSize="15sp"
-                    android:layout_below="@+id/agent_signup_Location"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="15sp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_below="@+id/agent_signup_AadharNum"
+                    android:layout_marginStart="50sp"
                     android:background="@drawable/stroke_background"
                     android:paddingStart="10dp"
                     android:inputType="text"
                     android:imeOptions="actionNext"
-                    android:drawableEnd="@drawable/ic_lock_black_24dp"
+                    android:drawableEnd="@drawable/ic_security_black_24dp"
                     android:paddingEnd="10dp"
-                    android:visibility="visible"/>
+                    android:visibility="visible"
+                    android:layout_marginTop="10dp" />
+                <EditText
+                    android:id="@+id/agent_signup_Bank_Account_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Enter your Bank A/c no"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp"
+                    android:layout_below="@+id/agent_signup_Bank_name"
+                    android:layout_marginStart="50sp"
+                    android:background="@drawable/stroke_background"
+                    android:paddingStart="10dp"
+                    android:inputType="number"
+                    android:imeOptions="actionNext"
+                    android:drawableEnd="@drawable/ic_security_black_24dp"
+                    android:paddingEnd="10dp"
+                    android:visibility="visible"
+                    android:layout_marginTop="10dp" />
 
+                <EditText
+                    android:id="@+id/agent_signup_ReEnterBank_Account_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="re-enter your Bank A/c no"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp"
+                    android:layout_below="@+id/agent_signup_Bank_Account_num"
+                    android:layout_marginStart="50sp"
+                    android:background="@drawable/stroke_background"
+                    android:paddingStart="10dp"
+                    android:inputType="number"
+                    android:imeOptions="actionNext"
+                    android:drawableEnd="@drawable/ic_security_black_24dp"
+                    android:paddingEnd="10dp"
+                    android:visibility="visible"
+                    android:layout_marginTop="10dp" />
+                <EditText
+                    android:id="@+id/agent_signup_Bank_Ifsc_Code"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Enter your Bank Ifsc code"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15sp"
+                    android:layout_below="@+id/agent_signup_ReEnterBank_Account_num"
+                    android:layout_marginStart="50sp"
+                    android:background="@drawable/stroke_background"
+                    android:paddingStart="10dp"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:drawableEnd="@drawable/ic_security_black_24dp"
+                    android:paddingEnd="10dp"
+                    android:visibility="visible"
+                    android:layout_marginTop="10dp" />
                 <Button
-                    android:id="@+id/agent_submit_personal_details"
+                    android:id="@+id/agent_submit_bank_details"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:layout_centerHorizontal="true"
                     android:layout_margin="15dp"
+                    android:layout_centerHorizontal="true"
                     android:text="Next"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"
-                    android:layout_below="@+id/agent_signup_confirm_pass"
+                    android:layout_below="@+id/agent_signup_Bank_Ifsc_Code"
                     android:background="@drawable/green_round_background"
-                    android:visibility="visible"/>
+                    android:visibility="visible" />
 
             </RelativeLayout>
             <de.hdodenhof.circleimageview.CircleImageView
@@ -169,10 +134,5 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center_horizontal" />
         </FrameLayout>
-
-
-
     </RelativeLayout>
-
-
 </ScrollView>

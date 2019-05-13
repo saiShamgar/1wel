@@ -16,9 +16,12 @@
     <string name="agent_bank_ifsc_preference">com.example.sss.wel.Utils.bank_ifsc_preference</string>
     <string name="agent_pan_num_preference">com.example.sss.wel.Utils.pan_num_preference</string>
     <string name="agent_gender_preference">com.example.sss.wel.Utils.gender_preference</string>
+    <string name="agent_ref_preference">com.example.sss.wel.Utils.ref_preference</string>
     <string name="agent_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
     <string name="agent_dob_preference">com.example.sss.wel.Utils.dob_preference</string>
     <string name="agent_login_preference">com.example.sss.wel.Utils.login_preference</string>
+    <string name="agent_latitude_preference">com.example.sss.wel.Utils.lat_preference</string>
+    <string name="agent_longitude_preference">com.example.sss.wel.Utils.logi_preference</string>
 
     //provider preference
     <string name="provider_name_preference">com.example.sss.wel.Utils.name_preference</string>
@@ -29,6 +32,13 @@
     <string name="provider_gender_preference">com.example.sss.wel.Utils.gender_preference</string>
     <string name="provider_pic_preference">com.example.sss.wel.Utils.pic_preference</string>
     <string name="provider_dob_preference">com.example.sss.wel.Utils.dob_preference</string>
+    <string name="provider_serviceDesc_preference">com.example.sss.wel.Utils.service_desc_preference</string>
+    <string name="provider_refID_preference">com.example.sss.wel.Utils.refID_preference</string>
+    <string name="provider_discount_preference">com.example.sss.wel.Utils.discount_preference</string>
+    <string name="provider_status_preference">com.example.sss.wel.Utils.status_preference</string>
+    <string name="provider_latitude_preference">com.example.sss.wel.Utils.latitude_preference</string>
+    <string name="provider_longitude_preference">com.example.sss.wel.Utils.longitude_preference</string>
+    <string name="provider_landmark_preference">com.example.sss.wel.Utils.landmark_preference</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

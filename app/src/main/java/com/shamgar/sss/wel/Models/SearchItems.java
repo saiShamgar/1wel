@@ -24,8 +24,10 @@ public class SearchItems {
     String phone_status;
     @SerializedName("service_discount")
     String service_discount;
+    @SerializedName("land_mark")
+    String landmark;
 
-    public SearchItems(String name, String user_id, String phone, String service, String address, String webSiteUrl, String service_des, String image, String phone_status, String service_discount) {
+    public SearchItems(String name, String user_id, String phone, String service, String address, String webSiteUrl, String service_des, String image, String phone_status, String service_discount, String landmark) {
         this.name = name;
         this.user_id = user_id;
         this.phone = phone;
@@ -36,6 +38,7 @@ public class SearchItems {
         this.image = image;
         this.phone_status = phone_status;
         this.service_discount = service_discount;
+        this.landmark = landmark;
     }
 
     public String getPhone_status() {
@@ -116,5 +119,13 @@ public class SearchItems {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public String getLandmark() {
+        return landmark;
+    }
+
+    public void setLandmark(String landmark) {
+        this.landmark = landmark;
     }
 }

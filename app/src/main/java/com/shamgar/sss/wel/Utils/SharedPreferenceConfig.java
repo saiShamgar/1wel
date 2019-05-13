@@ -28,6 +28,20 @@ public class SharedPreferenceConfig {
         Log.i("SharedPreferanceRead: ",""+gender);
         return gender;
     }
+
+    public void writeAgentRefID(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.agent_ref_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readAgentRefID(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.agent_ref_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
     public void writeAgentLoggedIn(String logged){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(context.getResources().getString(R.string.agent_login_preference), logged);
@@ -110,6 +124,35 @@ public class SharedPreferenceConfig {
         Log.i("SharedPreferanceRead: ",""+gender);
         return gender;
     }
+
+    public void writeAgentLatitude(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.agent_latitude_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readAgentLatitude(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.agent_latitude_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
+    public void writeAgentLongitude(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.agent_longitude_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readAgentLongitude(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.agent_longitude_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
 
     public void writeAgentBankName(String gender){
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -297,6 +340,103 @@ public class SharedPreferenceConfig {
     public String readProviderDob(){
         String gender;
         gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_dob_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
+    public void writeProviderServiceDesc(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_serviceDesc_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderServiceDesc(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_serviceDesc_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
+    public void writeProviderREfID(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_refID_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderRefID(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_refID_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
+    public void writeProviderDiscount(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_discount_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderDiscount(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_discount_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
+    public void writeProviderStatus(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_status_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderStatus(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_status_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
+    public void writeProviderLatitude(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_latitude_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderLatitude(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_latitude_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+
+    public void writeProviderLongitude(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_longitude_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderLongitude(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_longitude_preference),"no");
+        Log.i("SharedPreferanceRead: ",""+gender);
+        return gender;
+    }
+    public void writeProviderLandmark(String gender){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getResources().getString(R.string.provider_landmark_preference), gender);
+        Log.i("SharedPreferanceWrite: ",""+gender);
+        editor.commit();
+    }
+
+    public String readProviderLandmark(){
+        String gender;
+        gender = sharedPreferences.getString(context.getResources().getString(R.string.provider_landmark_preference),"no");
         Log.i("SharedPreferanceRead: ",""+gender);
         return gender;
     }

@@ -9,18 +9,18 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="6dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
+        app:cardElevation="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
-        <android.support.constraint.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -34,13 +34,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="Discount :"
                 android:textColor="@color/colorPrimaryDark"
-                android:textStyle="italic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/searchItemBlockOption"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/serviceDiscountFromDB"
@@ -53,12 +47,7 @@
                 android:text="20% to 30%"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/searchItemBlockOption"
-                app:layout_constraintHorizontal_bias="0.027"
-                app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                android:layout_toRightOf="@+id/textView3"/>
 
             <TextView
                 android:id="@+id/txtCallNow"
@@ -71,12 +60,7 @@
                 android:text="call Now"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/searchItemBlockOption"
-                app:layout_constraintHorizontal_bias="0.744"
-                app:layout_constraintStart_toEndOf="@+id/serviceDiscountFromDB"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                android:layout_toLeftOf="@+id/searchItemBlockOption"/>
 
             <ImageButton
                 android:id="@+id/searchItemBlockOption"
@@ -88,13 +72,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="@color/white"
-                android:src="@drawable/ic_more_vert_black_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.977"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                android:src="@drawable/ic_more_vert_black_24dp" />
 
             <ImageView
                 android:id="@+id/search_item_image"
@@ -104,27 +82,33 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="4dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/one_wel_loge"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.014"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                android:src="@drawable/one_wel_loge" />
 
             <TextView
                 android:id="@+id/search_service_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/servicer_name"
+                android:layout_below="@+id/search_name_db"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:text="Category :"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/search_item_image"
-                app:layout_constraintTop_toBottomOf="@+id/servicer_name" />
+                android:layout_toRightOf="@+id/search_item_image"/>
+
+            <TextView
+                android:id="@+id/search_landmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/search_category_from_db"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Area :"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_toRightOf="@+id/search_item_image"/>
 
             <TextView
                 android:id="@+id/servicer_name"
@@ -136,16 +120,14 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/search_item_image"
-                app:layout_constraintTop_toBottomOf="@+id/searchItemBlockOption" />
+                android:layout_below="@+id/serviceDiscountFromDB"
+                android:layout_toRightOf="@+id/search_item_image"/>
 
             <TextView
                 android:id="@+id/servicer_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/search_service_type"
+                android:layout_below="@+id/search_landmark_from_db"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -153,146 +135,109 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/search_item_image"
-                app:layout_constraintTop_toBottomOf="@+id/search_service_type" />
+                android:layout_toRightOf="@+id/search_item_image"/>
 
-            <TextView
-                android:id="@+id/servicer_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/servicer_phone"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="Address :"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/search_item_image"
-                app:layout_constraintTop_toBottomOf="@+id/servicer_phone" />
 
-            <TextView
-                android:id="@+id/search_address_fromdb"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/servicer_address"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="8dp"
-                android:text="Address"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.255"
-                app:layout_constraintStart_toEndOf="@+id/servicer_address"
-                app:layout_constraintTop_toBottomOf="@+id/search_phone_from_db" />
 
             <TextView
                 android:id="@+id/search_websiteUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/search_address_fromdb"
+                android:layout_below="@+id/search_phone_from_db"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
                 android:text="WebSite Url:"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.038"
-                app:layout_constraintStart_toEndOf="@+id/search_item_image"
-                app:layout_constraintTop_toBottomOf="@+id/search_address_fromdb" />
+               android:layout_toRightOf="@+id/search_item_image" />
 
             <TextView
                 android:id="@+id/search_Advertiment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/search_address_fromdb"
+                android:layout_below="@+id/search_websiteUrl_from_db"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="ADVT Details :"
+                android:layout_marginStart="8dp"
+                android:text="Details :"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.04"
-                app:layout_constraintStart_toEndOf="@+id/search_item_image"
-                app:layout_constraintTop_toBottomOf="@+id/search_websiteUrl"
-                app:layout_constraintVertical_bias="1.0" />
+                android:layout_toRightOf="@+id/search_item_image" />
 
 
             <TextView
                 android:id="@+id/search_desp"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/search_item_image"
+                android:layout_below="@+id/search_websiteUrl_from_db"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="nurse"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/search_Advertiment"
-                app:layout_constraintTop_toBottomOf="@+id/search_websiteUrl_from_db"
-                app:layout_constraintVertical_bias="1.0" />
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/search_Advertiment"/>
 
             <TextView
                 android:id="@+id/search_name_db"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="56dp"
                 android:layout_toRightOf="@+id/servicer_name"
+                android:layout_below="@+id/serviceDiscountFromDB"
                 android:text="sai"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.128"
-                app:layout_constraintStart_toEndOf="@+id/servicer_name"
-                app:layout_constraintTop_toBottomOf="@+id/searchItemBlockOption" />
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/search_category_from_db"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:layout_toRightOf="@+id/search_service_type"
                 android:text="carpenter"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.084"
-                app:layout_constraintStart_toEndOf="@+id/search_service_type"
-                app:layout_constraintTop_toBottomOf="@+id/search_name_db" />
+                android:textColor="@color/black"
+                android:layout_below="@+id/search_name_db"/>
+
+            <TextView
+                android:id="@+id/search_landmark_from_db"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@+id/search_landmark"
+                android:text="CMR CENTRAL"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:layout_below="@+id/search_category_from_db"/>
 
             <TextView
                 android:id="@+id/search_phone_from_db"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/ic_call_black_24dp"
                 android:text="123456889"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.156"
-                app:layout_constraintStart_toEndOf="@+id/servicer_phone"
-                app:layout_constraintTop_toBottomOf="@+id/search_category_from_db" />
+                android:textColor="#0D25AD"
+                android:layout_below="@+id/search_landmark_from_db"
+                android:layout_toRightOf="@+id/servicer_phone"/>
 
             <TextView
                 android:id="@+id/search_websiteUrl_from_db"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/search_address_fromdb"
+                android:layout_below="@+id/search_phone_from_db"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_toRightOf="@+id/search_websiteUrl"
                 android:text="www.saiappdeveloper.com"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/search_websiteUrl"
-                app:layout_constraintTop_toBottomOf="@+id/search_address_fromdb" />
+                android:textColor="#0D25AD"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

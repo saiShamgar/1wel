@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<LinearLayout android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context=".UI.MainActivity">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -106,7 +99,7 @@
                             android:layout_width="match_parent"
                             android:fontFamily="sans-serif-light"
                             android:textSize="14sp"
-                            android:hint="enter Location"
+                            android:hint="Enter Location"
                             android:textColor="@color/white"
                             android:textColorHint="@color/white"
                             android:paddingEnd="10dp"
@@ -156,7 +149,7 @@
             android:id="@+id/advtHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="15sp"
             android:text="Advertisements that we offers for : "
             android:layout_margin="8dp"/>
@@ -170,13 +163,13 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp">
 
             </android.support.v7.widget.RecyclerView>
 
 
         </FrameLayout>
 
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</LinearLayout>
 

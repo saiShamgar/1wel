@@ -12,7 +12,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -63,10 +65,12 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
         holder.search_category_from_db.setText(searchItems.get(position).getService());
         holder.search_desp.setText(searchItems.get(position).getService_des());
 
-        holder.search_websiteUrl_from_db.setText(searchItems.get(position).getWebSiteUrl());
-        holder.search_address_fromdb.setText(searchItems.get(position).getAddress());
+        SpannableString contant=new SpannableString(searchItems.get(position).getWebSiteUrl());
+        contant.setSpan(new UnderlineSpan(),0,contant.length(),0);
+        holder.search_websiteUrl_from_db.setText(contant);
 
         holder.serviceDiscountFromDB.setText(searchItems.get(position).getService_discount());
+        holder.search_landmark_from_db.setText(searchItems.get(position).getLandmark());
 
         if (!TextUtils.isEmpty(searchItems.get(position).getPhone_status())){
             Log.e("phone status",searchItems.get(position).getPhone_status());
@@ -80,6 +84,20 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
         }
 
         holder.txtCallNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent callIntent=new Intent();
+                callIntent.setAction(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"+searchItems.get(position).getPhone()));
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(context,"permissions not granted",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                context.startActivity(callIntent);
+            }
+        });
+
+        holder.search_phone_from_db.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent callIntent=new Intent();
@@ -142,10 +160,10 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
 
     public class MainActivityViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView search_name_db,search_category_from_db,search_phone_from_db,search_address_fromdb,search_websiteUrl_from_db,search_desp;
+        private TextView search_name_db,search_category_from_db,search_phone_from_db,search_websiteUrl_from_db,search_desp;
         private ImageView search_item_image;
         private ImageButton searchItemBlockOption;
-        private TextView serviceDiscountFromDB,txtCallNow;
+        private TextView serviceDiscountFromDB,txtCallNow,search_landmark_from_db;
 
         public MainActivityViewHolder(View itemView) {
             super(itemView);
@@ -153,13 +171,13 @@ public class MainActivityRecyclerAdapter extends RecyclerView.Adapter<MainActivi
             search_name_db=itemView.findViewById(R.id.search_name_db);
             search_category_from_db=itemView.findViewById(R.id.search_category_from_db);
             search_phone_from_db=itemView.findViewById(R.id.search_phone_from_db);
-            search_address_fromdb=itemView.findViewById(R.id.search_address_fromdb);
             search_websiteUrl_from_db=itemView.findViewById(R.id.search_websiteUrl_from_db);
             search_desp=itemView.findViewById(R.id.search_desp);
             search_item_image=itemView.findViewById(R.id.search_item_image);
             searchItemBlockOption=itemView.findViewById(R.id.searchItemBlockOption);
             serviceDiscountFromDB=itemView.findViewById(R.id.serviceDiscountFromDB);
             txtCallNow=itemView.findViewById(R.id.txtCallNow);
+            search_landmark_from_db=itemView.findViewById(R.id.search_landmark_from_db);
         }
     }
 }

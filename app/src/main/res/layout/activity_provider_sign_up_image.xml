@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.providers.ProviderSignUpActivity"
+    android:background="#F7F5F5">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <FrameLayout
+            android:id="@+id/flprovider"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
+            android:paddingTop="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/white_round_background"
+                android:focusableInTouchMode="true">
+
+                <RadioGroup
+                    android:id="@+id/radioGroupProvider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <RadioButton
+                        android:id="@+id/provider_radio_btn_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="Male" />
+
+                    <RadioButton
+                        android:id="@+id/provider_radio_btn_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="Female" />
+
+                    <RadioButton
+                        android:id="@+id/provider_radio_btn_others"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Otherss" />
+                </RadioGroup>
+
+                <ImageView
+                    android:id="@+id/provider_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_below="@+id/radioGroupProvider"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_person_black_24dp"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/upload_image_provider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/radioGroupProvider"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_toRightOf="@+id/provider_image"
+                    android:text="Upload Image"
+                    android:textAllCaps="false"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/provider_reg_submit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/provider_image"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="30dp"
+                    android:background="@drawable/green_round_background"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:text="Submit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                //mobile verification
+
+                <TextView
+                    android:id="@+id/txt_otp_hint_provider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="80dp"
+                    android:text="Otp has been sent to you number"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/provider_signup_virification"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/txt_otp_hint_provider"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="50sp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/stroke_background"
+                    android:drawableEnd="@drawable/ic_lock_black_24dp"
+                    android:hint="Enter your verification code"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/provider_verification_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/provider_signup_virification"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="30dp"
+                    android:background="@drawable/green_round_background"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:text="Submit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                 />
+
+        </FrameLayout>
+    </RelativeLayout>
+</ScrollView>

@@ -134,11 +134,34 @@
 
                 </AutoCompleteTextView>
 
+                <EditText
+                    android:id="@+id/provider_landmark"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/provider_signup_Location"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="15sp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/stroke_background"
+                    android:hint="Enter area"
+                    android:imeOptions="actionNext"
+                    android:drawableEnd="@drawable/ic_location_on_black_24dp"
+                    android:inputType="text|textMultiLine"
+                    android:paddingStart="10dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="15dp"
+                    android:textSize="15sp"
+                    android:maxLength="500"
+                    android:visibility="visible" />
+
+
                 <AutoCompleteTextView
                     android:id="@+id/provider_services_type"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@+id/provider_signup_Location"
+                    android:layout_below="@+id/provider_landmark"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="15sp"
@@ -293,130 +316,13 @@
                     android:textColor="@color/white"
                     android:visibility="visible" />
 
-                //user Profile pic and gender
-
-                <RadioGroup
-                    android:id="@+id/radioGroupProvider"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="80dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <RadioButton
-                        android:id="@+id/provider_radio_btn_male"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:text="Male" />
-
-                    <RadioButton
-                        android:id="@+id/provider_radio_btn_female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:text="Female" />
-
-                    <RadioButton
-                        android:id="@+id/provider_radio_btn_others"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Otherss" />
-                </RadioGroup>
-
-                <ImageView
-                    android:id="@+id/provider_image"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_below="@+id/radioGroupProvider"
-                    android:layout_margin="5dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_person_black_24dp"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/upload_image_provider"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/radioGroupProvider"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_toRightOf="@+id/provider_image"
-                    android:text="Upload Image"
-                    android:textAllCaps="false"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/provider_reg_submit_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_below="@+id/provider_image"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="30dp"
-                    android:background="@drawable/green_round_background"
-                    android:paddingStart="30dp"
-                    android:paddingEnd="30dp"
-                    android:text="Submit"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
-
-                //mobile verification
-
-                <TextView
-                    android:id="@+id/txt_otp_hint_provider"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="80dp"
-                    android:text="Otp has been sent to you number"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-                <EditText
-                    android:id="@+id/provider_signup_virification"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@+id/txt_otp_hint_provider"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="50sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/stroke_background"
-                    android:drawableEnd="@drawable/ic_lock_black_24dp"
-                    android:hint="Enter your verification code"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:textSize="15sp"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/provider_verification_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_below="@+id/provider_signup_virification"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="30dp"
-                    android:background="@drawable/green_round_background"
-                    android:paddingStart="30dp"
-                    android:paddingEnd="30dp"
-                    android:text="Submit"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
             </RelativeLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/one_wel" />
+                />
         </FrameLayout>
 
 

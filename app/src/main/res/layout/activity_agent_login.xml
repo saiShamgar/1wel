@@ -102,8 +102,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/one_wel"/>
+                android:layout_gravity="center_horizontal" />
         </FrameLayout>
 
 
